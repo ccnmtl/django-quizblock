@@ -134,7 +134,7 @@ class Question(models.Model):
     def correct_answer_number(self):
         if self.question_type != "single choice":
             return None
-        return self.answer_set.filter(correct=True)[0].ordinality
+        return self.answer_set.filter(correct=True)[0]._order
 
     def correct_answer_letter(self):
         if self.question_type != "single choice" or self.answer_set.count() == 0:

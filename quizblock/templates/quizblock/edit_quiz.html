@@ -44,7 +44,7 @@ var saveOrder = function() {
 {% for question in quiz.question_set.all %}
 <li class="draggable" id="question-{{question.id}}">
 <span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-question question.id %}">delete</a>] 
-Question {{ question.ordinality }}: 
+Question {{ question._order }}: 
 <a href="{% url edit-question question.id %}">{{question.text|truncatewords:20}}</a></li>
 {% endfor %}
 </ul>

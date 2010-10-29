@@ -74,7 +74,6 @@ def add_question_to_quiz(request,id):
     if form.is_valid():
         question = form.save(commit=False)
         question.quiz = quiz
-        question.ordinality = quiz.question_set.count() + 1
         question.save()
     return HttpResponseRedirect(reverse("edit-quiz",args=[quiz.id]))
 
@@ -94,7 +93,6 @@ def add_answer_to_question(request,id):
     if form.is_valid():
         answer = form.save(commit=False)
         answer.question = question
-        answer.ordinality = question.answer_set.count() + 1
         if answer.label == '':
             answer.label = answer.value
         answer.save()
