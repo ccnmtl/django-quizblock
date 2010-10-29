@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block js %}
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+var saveOrder = function() {
+    var url = "{% url reorder-questions quiz.id %}?";
+    var worktodo = 0;
+    jQuery("#questions li").each(function(index,element) {
+       worktodo = 1;
+       var id = jQuery(element).attr('id').split("-")[1];
+       url += "question_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+};
+
+</script>
+
+<style type="text/css">
+	.draghandle {float: left;}
+	#questions {list-style-type: none; margin: 0; padding: 0;}
+	#questions li { margin: 0 3px 3px 3px; padding: 0.4em;
+	padding-left: 1.5em; 
+          background-color: #ddd;
+	}
+	#questions li span { position: absolute; margin-left: -1.3em; }
+	.dragging {border: #f60 solid 1px;}
+	</style>
+{% endblock %}
+
+{% block content %}
+<h2><a href="/edit{{section.get_absolute_url}}">{{section.label}}</a>: {{quiz.pageblock.label}}</h2>
+
+<ul id="questions" class="dragparent">
+{% for question in quiz.question_set.all %}
+<li class="draggable" id="question-{{question.id}}">
+<span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-question question.id %}">delete</a>] 
+Question {{ question.ordinality }}: 
+<a href="{% url edit-question question.id %}">{{question.text|truncatewords:20}}</a></li>
+{% endfor %}
+</ul>
+
+<form action="add_question/" method="post">
+<h2>Add Question</h2>
+<table width="100%">
+{{ quiz.add_question_form.as_table}}
+</table>
+<input type="submit" value="add question" />
+</form>
+
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#questions").sortable({
+    containment : 'parent'
+    ,axis : 'y'
+    ,tolerance: 'pointer'
+    ,activeClass: 'dragging'
+    ,handle: '.draghandle'
+    ,stop: function (event,ui) { saveOrder();}
+  });
+  jQuery("#questions").disableSelection();
+});
+</script>
+
+
+{% endblock %}
+
+{% block sidenav %}
+{% with "/edit" as menu_base %}
+{% include "main/menu.html" %}
+{% endwith %}
+{% endblock %}

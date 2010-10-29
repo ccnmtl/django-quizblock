@@ -1,0 +1,158 @@
+{% load markup %}
+{% load getresponse %}
+<style type="text/css">
+</style>
+{{ block.description|markdown }}
+
+{% for question in block.question_set.all %}
+{% getquestionresponse question as response %}
+
+<div class="cases">
+     {{question.intro_text|markdown}}
+
+     <div class="casetitle"> Question {{question.ordinality}}:</div>
+     
+     <div class="casecontent">
+           <div class="casequestion">
+                 {{question.text|markdown}}
+
+		 {% if question.answerable %}
+		 {% if block.rhetorical %}
+                 <form id="form-{{question.id}}" method="post">
+		 {% endif %}
+                       <ol type="A">
+			 {% for answer in question.answer_set.all %}
+			 {% if block.rhetorical %}
+			   {% if question.is_single_choice %}
+                             <li><input name="question{{question.id}}" value="{{answer.label}}" type="radio" />{{answer.label}}</li>
+			   {% else %}
+                             <li><input name="question{{question.id}}" value="{{answer.label}}" type="checkbox" />{{answer.label}}</li>
+			   {% endif %}
+			 {% else %}
+			    {% if question.is_single_choice %}
+<li>
+{% if response %}
+{% ifequal response.value answer.value %}
+<span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
+{% else %}
+{{answer.label}}
+{% endifequal %}
+{% else %}
+<input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+       value="{{answer.value}}" type="radio" />{{answer.label}}{% endif %}
+</li>
+			    {% else %}
+
+<li>
+
+{% if response %}
+
+{% comment %}
+
+multi select is trickier. since there can be more than one correct
+response and more than one response by the user.
+
+{% endcomment %}
+
+{% ifanswerin response answer  %}
+   <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}">{{answer.label}}</span>
+{% else %}
+   <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
+{% endifanswerin %}
+
+{% else %}
+{% comment %}no response{% endcomment %}
+   <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}" value="{{answer.value}}" type="checkbox" />{{answer.label}}
+{% endif %}</li>
+			    {% endif %}
+			 {% endif %}
+			 {% endfor %}
+                      </ol>
+                 {% if block.rhetorical %}
+                 </form>
+		 {% endif %}
+		 {% else %}
+
+		 {% if question.is_short_text %}
+  		   {% if block.rhetorical %}
+		     <input type="text" name="question{{question.id}}" />
+		   {% else %}
+{% if response %}
+<p class="yours">{{response.value|markdown}}</p>
+{% else %}
+<input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+{% endif %}
+		   {% endif %}
+		 {% endif %}
+
+		 {% if question.is_long_text %}
+  		   {% if block.rhetorical %}
+		     <textarea rows="10" name="question{{question.id}}" ></textarea>
+		   {% else %}
+{% if response %}
+<p class="yours">{{response.value|markdown}}</p>
+{% else %}
+		     <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" ></textarea>
+{% endif %}
+		   {% endif %}
+		 {% endif %}
+
+
+
+		 {% endif %}
+           </div>
+	   {% if question.answerable %}
+	   {% if block.rhetorical %}
+	   {% if question.is_single_choice %}
+           <div class="casesanswerdisplay">
+                 <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
+                 <div id="q{{question.id}}" class="toggleable">
+                 <p>{% if question.correct_answer_letter %}<i>The
+                 correct answer is
+                 {{question.correct_answer_letter}}:</i>{% endif %} {{question.explanation|markdown}}</p>
+                 </div>
+           </div>
+	   {% endif %}
+	   {% if question.is_multiple_choice %}
+	   <div class="casesanswerdisplay">
+                 <a href="#q{{question.id}}" class="moretoggle">Show answer(s) &gt;&gt;</a>
+                 <div id="q{{question.id}}" class="toggleable">
+                 <p><i>The correct answer(s):</i></p>
+		   <ol type="A">
+		     {% for answer in question.answer_set.all %}
+		     <li>{% if answer.correct %}
+		       <span class="correctanswer">
+			 {% else %}
+			 <span class="incorrectanswer" %>
+			 {% endif %}
+		       <span class="answer-inner">{{answer.label}}</span></span></li>
+		     {% endfor %}
+		   </ol>
+
+<p>{{question.explanation|markdown}}</p>
+                 </div>
+           </div>
+	   {% endif %}
+	   {% endif %}
+	   {% else %}
+	   {% comment %} short/long text questions {% endcomment %}
+
+	   {% if block.rhetorical %}
+	   {% if question.explanation %}
+           <div class="casesanswerdisplay">
+                 <a href="#q{{question.id}}" class="moretoggle">Show explanation &gt;&gt;</a>
+                 <div id="q{{question.id}}" class="toggleable">
+                 <p>{{question.explanation|markdown}}</p>
+                 </div>
+           </div>
+	   {% endif %}
+	   {% endif %}
+
+	   {% endif %}
+     </div>
+</div> 
+{% endfor %}
+
+{% if block.rhetorical %}
+<script src="http://mt.ccnmtl.columbia.edu/pedialabs/js/quizshow.js" type="text/javascript" language="javascript"></script>
+{% endif %}	

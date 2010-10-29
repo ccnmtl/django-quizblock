@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block js %}
+
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"
+        type="text/javascript" ></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.3/jquery-ui.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+var saveOrder = function() {
+    var url = "{% url reorder-answer question.id %}?";
+    var worktodo = 0;
+    jQuery("#answers li").each(function(index,element) {
+       worktodo = 1;
+       var id = jQuery(element).attr('id').split("-")[1];
+       url += "answer_" + index + "=" + id + ";";
+    });
+    if (worktodo == 1) {
+        var req = new XMLHttpRequest();
+        req.open("POST",url,true);
+        req.send(null);
+    }
+};
+
+</script>
+
+<style type="text/css">
+	.draghandle {float: left;}
+	#answers {list-style-type: none; margin: 0; padding: 0;}
+	#answers li { margin: 0 3px 3px 3px; padding: 0.4em;
+	padding-left: 1.5em; 
+          background-color: #ddd;
+	}
+	#answers li span { position: absolute; margin-left: -1.3em; }
+	.dragging {border: #f60 solid 1px;}
+	</style>
+
+{% endblock %}
+{% block content %}
+
+<h2><a href="{% url edit-quiz question.quiz.id %}">Quiz</a> Question {{question.ordinality}}: {{ question.text }}</h2>
+
+<form action="." method="post">
+<table width="100%">
+{{ question.edit_form.as_table }}
+</table>
+<input type="submit" value="save" />
+</form>
+
+{% if question.answerable %}
+<h2>Answers</h2>
+<ul class="dragparent" id="answers">
+{% for answer in question.answer_set.all %}
+<li class="draggable" id="answer-{{answer.id}}">
+<span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-answer answer.id %}">delete</a>] 
+Answer {{ answer.ordinality }}: 
+<a href="{% url edit-answer answer.id %}">{{answer.label}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if question.answerable %}
+<h2>Add Answer</h2>
+<form action="add_answer/" method="post">
+<table width="100%">
+{{ question.add_answer_form.as_table}}
+</table>
+<input type="submit" value="add answer" />
+</form>
+{% endif %}
+
+<script type="text/javascript">
+jQuery(function() {
+  jQuery("#answers").sortable({
+    containment : 'parent'
+    ,axis : 'y'
+    ,tolerance: 'pointer'
+    ,activeClass: 'dragging'
+    ,handle: '.draghandle'
+    ,stop: function (event,ui) { saveOrder();}
+  });
+  jQuery("#answers").disableSelection();
+});
+</script>
+
+
+{% endblock %}

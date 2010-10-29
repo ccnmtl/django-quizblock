@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2><a href="{% url edit-quiz answer.question.quiz.id %}">Quiz</a> 
+<a href="{% url edit-question answer.question.id %}">Question
+  {{answer.question.ordinality}}: {{ question.text }}</a>
+Answer {{answer.ordinality}}: {{ answer.value }}
+</h2>
+
+<form action="." method="post">
+<table width="100%">
+{{ answer.edit_form.as_table }}
+</table>
+<input type="submit" value="save" />
+</form>
+
+{% endblock %}
