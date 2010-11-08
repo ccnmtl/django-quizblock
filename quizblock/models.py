@@ -114,6 +114,9 @@ class Question(models.Model):
     def __unicode__(self):
         return self.text
 
+    def display_number(self):
+        return self._order
+
     def edit_form(self,request=None):
         class EditForm(forms.ModelForm):
             class Meta:
