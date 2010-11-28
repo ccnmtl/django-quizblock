@@ -61,7 +61,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea(),
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
-            alt_text = "<a href=\"" + reverse("edit-quiz",args=[self.id]) + "\">manage questions/answers</a>" 
+            alt_text = "<a href=\"" + reverse("edit-quiz",args=[self.id]) + "\">manage questions/answers</a>"
         return EditForm()
 
     @classmethod
@@ -83,11 +83,7 @@ class Quiz(models.Model):
         self.save()
 
     def add_question_form(self,request=None):
-        class AddQuestionForm(forms.ModelForm):
-            class Meta:
-                model = Question
-                exclude = ("quiz",)
-        return AddQuestionForm(request)
+        return QuestionForm(request)
 
     def update_questions_order(self,question_ids):
         self.set_question_order(question_ids)
@@ -113,20 +109,15 @@ class Question(models.Model):
 
     def __unicode__(self):
         return self.text
+      
+    def order(self):
+      return self._order
 
     def edit_form(self,request=None):
-        class EditForm(forms.ModelForm):
-            class Meta:
-                model = Question
-                exclude = ("quiz",)
-        return EditForm(request,instance=self)
+      return QuestionForm(request, instance=self)
 
     def add_answer_form(self,request=None):
-        class AddAnswerForm(forms.ModelForm):
-            class Meta:
-                model = Answer
-                exclude = ("question",)
-        return AddAnswerForm(request)
+        return AnswerForm(request)
 
     def correct_answer_values(self):
         return [a.value for a in self.answer_set.filter(correct=True)]
@@ -177,13 +168,12 @@ class Answer(models.Model):
 
     def __unicode__(self):
         return self.label
+      
+    def order(self):
+        return self._order  
 
     def edit_form(self,request=None):
-        class EditForm(forms.ModelForm):
-            class Meta:
-                model = Answer
-                exclude = ("question",)
-        return EditForm(request,instance=self)
+        return AnswerForm(request,instance=self)
 
 
 class Submission(models.Model):
@@ -207,4 +197,15 @@ class Response(models.Model):
 
     def is_correct(self):
         return self.value in self.question.correct_answer_values()
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        exclude = ("quiz",)
+        fields = ('question_type', 'intro_text', 'text', 'explanation')
+        
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        exclude = ("question",)
 

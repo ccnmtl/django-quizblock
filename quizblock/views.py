@@ -59,7 +59,7 @@ def reorder_answers(request,id):
 
 def reorder_questions(request,id):
     if request.method != "POST":
-        return HttpResponse("only use POST for this")
+        return HttpResponse("only use POST for this", status=400)
     quiz = get_object_or_404(Quiz,id=id)
     keys = request.GET.keys()
     question_keys = [int(k[len('question_'):]) for k in keys if k.startswith('question_')]

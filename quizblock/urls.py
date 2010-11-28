@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns
 
-urlpatterns = patterns('quizblock.views',
+urlpatterns = patterns('quiz.views',
                        (r'^edit_quiz/(?P<id>\d+)/$','edit_quiz',{},'edit-quiz'),
                        (r'^edit_quiz/(?P<id>\d+)/add_question/$','add_question_to_quiz',{},'add-question-to-quiz'),
                        (r'^edit_question/(?P<id>\d+)/$','edit_question',{},'edit-question'),

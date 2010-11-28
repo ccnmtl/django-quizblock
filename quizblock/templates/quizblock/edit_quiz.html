@@ -42,10 +42,10 @@ var saveOrder = function() {
 
 <ul id="questions" class="dragparent">
 {% for question in quiz.question_set.all %}
-<li class="draggable" id="question-{{question.id}}">
-<span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-question question.id %}">delete</a>] 
-Question {{ question._order }}: 
-<a href="{% url edit-question question.id %}">{{question.text|truncatewords:20}}</a></li>
+    <li class="draggable" id="question-{{question.id}}">
+    <span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-question question.id %}">delete</a>] 
+    Question {{ question.order }}: 
+    <a href="{% url edit-question question.id %}">{{question.text|truncatewords:5}}</a></li>
 {% endfor %}
 </ul>
 
@@ -70,7 +70,6 @@ jQuery(function() {
   jQuery("#questions").disableSelection();
 });
 </script>
-
 
 {% endblock %}
 

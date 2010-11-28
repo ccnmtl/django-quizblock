@@ -1,10 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base_two_col_left.html" %}
 {% block content %}
 
 <h2><a href="{% url edit-quiz answer.question.quiz.id %}">Quiz</a> 
 <a href="{% url edit-question answer.question.id %}">Question
-  {{answer.question._order}}: {{ question.text }}</a>
-Answer {{answer._order}}: {{ answer.value }}
+  {{answer.question.order}}: {{ question.text }}</a>
+Answer {{answer.order}}: {{ answer.value }}
 </h2>
 
 <form action="." method="post">
