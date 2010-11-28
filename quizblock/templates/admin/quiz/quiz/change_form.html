@@ -68,8 +68,6 @@
           , stop: function (event,ui) { saveOrderOfQuestions({{adminform.form.instance.id}}); }
         });
 
-        jQuery("#question-order-list").disableSelection();
-
         toggleExplanation();
         
         jQuery("#id_rhetorical").click(function(event) { toggleExplanation(); });
