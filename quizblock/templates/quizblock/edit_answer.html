@@ -3,8 +3,8 @@
 
 <h2><a href="{% url edit-quiz answer.question.quiz.id %}">Quiz</a> 
 <a href="{% url edit-question answer.question.id %}">Question
-  {{answer.question.order}}: {{ question.text }}</a>
-Answer {{answer.order}}: {{ answer.value }}
+  {{answer.question.display_number}}: {{ question.text }}</a>
+Answer {{answer.display_number}}: {{ answer.value }}
 </h2>
 
 <form action="." method="post">

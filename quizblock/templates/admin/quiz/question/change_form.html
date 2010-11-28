@@ -101,7 +101,7 @@
 {% endif %}
 
 <div>
-    <h2>{{original.order|add:"1"}}. {{ original|capfirst }}</h2>  
+    <h2>{{original.display_number|add:"1"}}. {{ original|capfirst }}</h2>  
     {% for fieldset in adminform %}
       {% include "admin/includes/fieldset.html" %}
     {% endfor %}

@@ -110,8 +110,8 @@ class Question(models.Model):
     def __unicode__(self):
         return self.text
       
-    def order(self):
-      return self._order
+    def display_number(self):
+        return self._order
 
     def edit_form(self,request=None):
       return QuestionForm(request, instance=self)
@@ -169,9 +169,6 @@ class Answer(models.Model):
     def __unicode__(self):
         return self.label
       
-    def order(self):
-        return self._order  
-
     def edit_form(self,request=None):
         return AnswerForm(request,instance=self)
 

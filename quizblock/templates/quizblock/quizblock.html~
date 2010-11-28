@@ -10,7 +10,11 @@
 <div class="cases">
      {{question.intro_text|markdown}}
 
+<<<<<<< HEAD
+     <div class="casetitle"> Question {{question.order}}:</div>
+=======
      <div class="casetitle"> Question {{question.display_number}}:</div>
+>>>>>>> 5b702ed83ab186b70d7181134409d97a151aea23
      
      <div class="casecontent">
            <div class="casequestion">

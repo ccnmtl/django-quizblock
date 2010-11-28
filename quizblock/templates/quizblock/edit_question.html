@@ -39,7 +39,7 @@ var saveOrder = function() {
 {% endblock %}
 {% block content %}
 
-<h2><a href="{% url edit-quiz question.quiz.id %}">Quiz</a> Question {{question.order}}: {{ question.text }}</h2>
+<h2><a href="{% url edit-quiz question.quiz.id %}">Quiz</a> Question {{question.display_number}}: {{ question.text }}</h2>
 
 <form action="." method="post">
 <table width="100%">
@@ -54,7 +54,7 @@ var saveOrder = function() {
 {% for answer in question.answer_set.all %}
 <li class="draggable" id="answer-{{answer.id}}">
 <span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-answer answer.id %}">delete</a>] 
-Answer {{ answer.order }}: 
+Answer {{ answer.display_number }}: 
 <a href="{% url edit-answer answer.id %}">{{answer.label}}</a></li>
 {% endfor %}
 </ul>
