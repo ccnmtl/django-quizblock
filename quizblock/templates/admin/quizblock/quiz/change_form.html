@@ -10,7 +10,7 @@
     var saveOrderOfQuestions = function(quiz_id) {
         jQuery("#ajax_errors").html("");
         
-        var base_url = "/quiz/reorder_questions/" + quiz_id + "/?";
+        var base_url = "/quizblock/reorder_questions/" + quiz_id + "/?";
         var params = "";
         jQuery("#question-order-list tr").each(function(index,element) {
            if (jQuery(element).attr('name') !== undefined) {

@@ -16,7 +16,7 @@ class AnswerInlineAdmin(admin.TabularInline):
     form = AnswerInlineForm
     model = Answer
     extra = 0
-    template = 'admin/quiz/answer/edit_inline/tabular.html'
+    template = 'admin/quizblock/answer/edit_inline/tabular.html'
     widgets = { 
            'label': forms.Textarea(attrs={'rows': 1 }),
     }
@@ -29,7 +29,7 @@ class AnswerInlineAdmin(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInlineAdmin, ]
-    template = 'admin/quiz/question/change_form.html'
+    template = 'admin/quizblock/question/change_form.html'
     
     fieldsets = (
         (None, {
@@ -58,7 +58,7 @@ class QuestionInlineAdmin(admin.TabularInline):
     form = QuestionModelForm
     model = Question
     inlines = [ AnswerInlineAdmin, ]
-    template = 'admin/quiz/question/edit_inline/tabular.html'
+    template = 'admin/quizblock/question/edit_inline/tabular.html'
     extra = 0
     
 class QuizModelForm(forms.ModelForm):

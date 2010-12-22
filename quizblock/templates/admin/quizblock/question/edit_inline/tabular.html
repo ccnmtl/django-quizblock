@@ -68,7 +68,7 @@
             {% endfor %}
             {% if inline_admin_form.original %}
                 <td style="padding: 0px; vertical-align: middle; text-align: center;">
-                    <a id='id_question_set-{{forloop.counter0}}-answerlink' class="changelink" href="/admin/quiz/question/{{inline_admin_form.original.id}}">{% trans "Edit" %}</a>
+                    <a id='id_question_set-{{forloop.counter0}}-answerlink' class="changelink" href="/admin/quizblock/question/{{inline_admin_form.original.id}}">{% trans "Edit" %}</a>
                 </td>
             {% endif %}
             {% if inline_admin_formset.formset.can_delete %}

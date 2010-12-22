@@ -130,7 +130,7 @@ class Question(models.Model):
     def correct_answer_letter(self):
         if self.question_type != "single choice" or self.answer_set.count() == 0:
             return None
-        return chr(ord('A') + self.correct_answer_number() - 1)
+        return chr(ord('A') + self.correct_answer_number())
 
     def update_answers_order(self,answer_ids):
         self.set_answer_order(answer_ids)

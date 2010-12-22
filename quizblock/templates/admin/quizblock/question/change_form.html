@@ -9,7 +9,7 @@
 <script type="text/javascript">
     var saveOrderOfAnswers = function(question_id) {
         jQuery("#ajax_errors").html("");
-        var base_url = "/quiz/reorder_answers/" + question_id + "/?";
+        var base_url = "/quizblock/reorder_answers/" + question_id + "/?";
         
         var params = "";
         jQuery("#answer-order-list tr").each(function(index,element) {
@@ -72,7 +72,7 @@
          {% endfor %}
          
          <a href="/admin/pagetree/section/{{current_section.id}}/">{{ current_section.label }}</a> &rsaquo;
-         <a href="/admin/quiz/quiz/{{original.quiz.id}}/">{{ original.quiz }}</a> &rsaquo;
+         <a href="/admin/quizblock/quiz/{{original.quiz.id}}/">{{ original.quiz }}</a> &rsaquo;
          {{ original }}
      {% endwith %}
 </div>
