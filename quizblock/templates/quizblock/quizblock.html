@@ -4,6 +4,10 @@
 </style>
 {{ block.description|markdown }}
 
+{% if request.user.is_anonymous %}
+<p class="warning">You must be logged in to view this content</p>
+{% else %}
+
 {% for question in block.question_set.all %}
 {% getquestionresponse question as response %}
 
@@ -156,3 +160,4 @@ response and more than one response by the user.
 {% if block.rhetorical %}
 <script src="http://mt.ccnmtl.columbia.edu/pedialabs/js/quizshow.js" type="text/javascript" language="javascript"></script>
 {% endif %}	
+{% endif %}
