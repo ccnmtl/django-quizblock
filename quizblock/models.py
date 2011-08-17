@@ -13,6 +13,8 @@ class Quiz(models.Model):
     template_file = "quizblock/quizblock.html"
 
     display_name = "Quiz"
+    exportable = True
+    importable = True
 
     def pageblock(self):
         return self.pageblocks.all()[0]
@@ -91,6 +93,30 @@ class Quiz(models.Model):
     def clear_user_submissions(self,user):
         Submission.objects.filter(user=user,quiz=self).delete()
 
+    def as_dict(self):
+        d = dict(description=self.description,
+                 rhetorical=self.rhetorical)
+        d['questions'] = [q.as_dict() for q in self.question_set.all()]
+        return d
+
+    def import_from_dict(self,d):
+        self.description = d['description']
+        self.rhetorical = d['rhetorical']
+        self.save()
+        self.submission_set.all().delete()
+        self.question_set.all().delete()
+        for q in d['questions']:
+            question = Question.objects.create(quiz=self,text=q['text'],
+                                               question_type=q['question_type'],
+                                               explanation=q['explanation'],
+                                               intro_text=q['intro_text'])
+            for a in q['answers']:
+                answer = Answer.objects.create(question=question,
+                                               value=a['value'],
+                                               label=a['label'],
+                                               correct=a['correct'])
+
+
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz)
     text = models.TextField()
@@ -155,6 +181,14 @@ class Question(models.Model):
         submission = Submission.objects.filter(user=user,quiz=self.quiz).order_by("-submitted")[0]
         return Response.objects.filter(question=self,submission=submission)
 
+    def as_dict(self):
+        return dict(
+            text=self.text,
+            question_type=self.question_type,
+            explanation=self.explanation,
+            intro_text=self.intro_text,
+            answers=[a.as_dict() for a in self.answer_set.all()]
+            )
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
@@ -172,6 +206,8 @@ class Answer(models.Model):
     def edit_form(self,request=None):
         return AnswerForm(request,instance=self)
 
+    def as_dict(self):
+        return dict(value=self.value,label=self.label,correct=self.correct)
 
 class Submission(models.Model):
     quiz = models.ForeignKey(Quiz)
