@@ -1,4 +1,5 @@
 {% load markup %}
+{% if block.rhetorical %}
       <div class="casesanswerdisplay">
         <a href="#q{{question.id}}" class="moretoggle">Show answer(s) &gt;&gt;</a>
         <div id="q{{question.id}}" class="toggleable">
@@ -19,3 +20,6 @@
           <p>{{question.explanation|markdown}}</p>
         </div>
       </div>
+{% else %}
+  <p>{{question.explanation|markdown}}</p>
+{% endif %}
