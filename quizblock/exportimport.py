@@ -34,7 +34,7 @@ class QuizExporter(object):
             for answer in question.answer_set.all():
                 print >> xmlfile, \
                     u"""<answer label="%s" value="%s" correct="%s" />""" % (
-                    sanitize(answer.label), answer.value, answer.correct)
+                    sanitize(answer.label), sanitize(answer.value), answer.correct)
 
             print >> xmlfile, "</question>"
         print >> xmlfile, "</quiz>"
