@@ -1,0 +1,12 @@
+{% load markup %}
+      <div class="casesanswerdisplay">
+        <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
+        <div id="q{{question.id}}" class="toggleable">
+          <p>
+            {% if question.correct_answer_letter %}
+              <i>The correct answer is {{question.correct_answer_letter}}:</i>
+            {% endif %} 
+            {{question.explanation|markdown}}
+          </p>
+        </div>
+      </div>

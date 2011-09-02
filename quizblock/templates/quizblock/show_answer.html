@@ -1,0 +1,10 @@
+  {% if question.answerable %}
+    {% if question.is_single_choice %}
+      {% include 'quizblock/single_choice_show_answer.html' %}
+    {% endif %}
+    {% if question.is_multiple_choice %}
+       {% include 'quizblock/multiple_choice_show_answer.html' %}
+    {% endif %}
+  {% else %}
+    {% include 'quizblock/long_answer_show_answer.html' %}
+  {% endif %}
