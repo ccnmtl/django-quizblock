@@ -73,17 +73,9 @@
    {% endif %}
 
    {% if question.is_long_text %}
-     {% if block.rhetorical %}
-       <textarea rows="10" name="question{{question.id}}" ></textarea>
-     {% else %}
-     {% if response %}
-       <p class="yours">{{response.value|markdown}}</p>
-     {% else %}
-       <textarea rows="10" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" ></textarea>
-     {% endif %}
+     {% include 'quizblock/long_text.html' %}
    {% endif %}
  {% endif %}
-{% endif %}
 </div>
 
 {% if block.rhetorical %}
