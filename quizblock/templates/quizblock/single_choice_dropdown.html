@@ -1,0 +1,8 @@
+{% load markup %}
+
+<select name="pageblock-{{block.pageblock.id}}-question{{question.id}}">
+  {% for answer in question.answer_set.all %}
+      <option value="{{answer.value}}">{{answer.label}}</option>
+  {% endfor %}
+</select>
+
