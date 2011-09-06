@@ -123,6 +123,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=256,
                                      choices=(("multiple choice","Multiple Choice: Multiple answers"),
                                               ("single choice","Multiple Choice: Single answer"),
+                                              ("single choice dropdown","Multiple Choice: Single answer (dropdowns)"),
                                               ("short text","Short Text"),
                                               ("long text","Long Text"),
                                               ))
@@ -163,7 +164,7 @@ class Question(models.Model):
 
     def answerable(self):
         """ whether it makes sense to have Answers associated with this """
-        return self.question_type in ["multiple choice","single choice"]
+        return self.question_type in ["multiple choice","single choice","single choice dropdown"]
 
     def is_short_text(self):
         return self.question_type == "short text"
@@ -173,6 +174,9 @@ class Question(models.Model):
 
     def is_single_choice(self):
         return self.question_type == "single choice"
+
+    def is_single_choice_dropdown(self):
+        return self.question_type == "single choice dropdown"
 
     def is_multiple_choice(self):
         return self.question_type == "multiple choice"

@@ -18,6 +18,10 @@
   	  {% include 'quizblock/single_choice.html' %}
 	{% endif %}
 
+	{% if question.is_single_choice_dropdown %}
+  	  {% include 'quizblock/single_choice_dropdown.html' %}
+	{% endif %}
+
 	{% if question.is_multiple_choice %}
 	  {% include 'quizblock/multiple_choice.html' %}
 	{% endif %}
