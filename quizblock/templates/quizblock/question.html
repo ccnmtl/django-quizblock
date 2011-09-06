@@ -13,77 +13,35 @@
       {{question.text|markdown}}
       {% if question.answerable %}
         {% if block.rhetorical %}<form id="form-{{question.id}}" method="post">{% endif %}
-        <ol type="A">
-	  {% for answer in question.answer_set.all %}
-	    {% if block.rhetorical %}
-	      {% if question.is_single_choice %}
-                <li><input name="question{{question.id}}" value="{{answer.label}}" type="radio" />{{answer.label}}</li>
-	      {% else %}
-                <li><input name="question{{question.id}}" value="{{answer.label}}" type="checkbox" />{{answer.label}}</li>
-	      {% endif %}
-	    {% else %}
-	      {% if question.is_single_choice %}
-                <li>
-                  {% if response %}
-                    {% ifequal response.value answer.value %}
-                      <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
-                    {% else %}
-                      {{answer.label}}
-                    {% endifequal %}
-                  {% else %}
-                     <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
-			    value="{{answer.value}}" type="radio" />{{answer.label}}
-                  {% endif %}
-                </li>
-              {% else %}
-                <li>
-                  {% if response %}
-                    {% comment %}
-		       multi select is trickier. since there can be more than one correct
-                       response and more than one response by the user.
-                    {% endcomment %}
-                    {% ifanswerin response answer  %}
-                      <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}">{{answer.label}}</span>
-                    {% else %}
-                      <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
-                    {% endifanswerin %}
-                  {% else %}
-                    {% comment %}no response{% endcomment %}
-                    <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}" value="{{answer.value}}" type="checkbox" />{{answer.label}}
-                  {% endif %}
-                </li>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        </ol>
+
+	{% if question.is_single_choice %}
+  	  {% include 'quizblock/single_choice.html' %}
+	{% endif %}
+
+	{% if question.is_multiple_choice %}
+	  {% include 'quizblock/multiple_choice.html' %}
+	{% endif %}
+
        {% if block.rhetorical %}
          </form>
        {% endif %}
      {% else %}
        {% if question.is_short_text %}
-  	 {% if block.rhetorical %}
-	   <input type="text" name="question{{question.id}}" />
-	 {% else %}
-       {% if response %}
-         <p class="yours">{{response.value|markdown}}</p>
-       {% else %}
-         <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" />
+         {% include 'quizblock/short_text.html' %}
+       {% endif %}
+
+       {% if question.is_long_text %}
+         {% include 'quizblock/long_text.html' %}
        {% endif %}
      {% endif %}
-   {% endif %}
+  </div>
 
-   {% if question.is_long_text %}
-     {% include 'quizblock/long_text.html' %}
-   {% endif %}
- {% endif %}
-</div>
-
-{% if block.rhetorical %}
-  {% include 'quizblock/show_answer.html' %}
-{% else %}
-    {% if response %}
-      {% include 'quizblock/show_answer.html' %}
-    {% endif %}
-{% endif %}
-</div>
+  {% if block.rhetorical %}
+    {% include 'quizblock/show_answer.html' %}
+  {% else %}
+      {% if response %}
+        {% include 'quizblock/show_answer.html' %}
+      {% endif %}
+  {% endif %}
+  </div>
 </div>

@@ -1,0 +1,28 @@
+{% load markup %}
+{% load getresponse %}
+
+
+<ol type="A">
+  {% for answer in question.answer_set.all %}
+    {% if block.rhetorical %}
+      <li><input name="question{{question.id}}" value="{{answer.label}}" type="checkbox" />{{answer.label}}</li>
+    {% else %}
+      <li>
+        {% if response %}
+          {% comment %}
+	  multi select is trickier. since there can be more than one correct
+          response and more than one response by the user.
+          {% endcomment %}
+          {% ifanswerin response answer  %}
+            <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}">{{answer.label}}</span>
+          {% else %}
+            <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
+          {% endifanswerin %}
+        {% else %}
+          {% comment %}no response{% endcomment %}
+          <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}" value="{{answer.value}}" type="checkbox" />{{answer.label}}
+        {% endif %}
+      </li>
+    {% endif %}
+  {% endfor %}
+</ol>
