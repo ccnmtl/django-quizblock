@@ -123,7 +123,7 @@ class Question(models.Model):
     question_type = models.CharField(max_length=256,
                                      choices=(("multiple choice","Multiple Choice: Multiple answers"),
                                               ("single choice","Multiple Choice: Single answer"),
-                                              ("single choice dropdown","Multiple Choice: Single answer (dropdowns)"),
+                                              ("single choice dropdown","Multiple Choice: Single answer (dropdown)"),
                                               ("short text","Short Text"),
                                               ("long text","Long Text"),
                                               ))
