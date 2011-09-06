@@ -22,23 +22,23 @@
 	  {% include 'quizblock/multiple_choice.html' %}
 	{% endif %}
 
-       {% if block.rhetorical %}
-         </form>
-       {% endif %}
-     {% else %}
-       {% if question.is_short_text %}
-         {% include 'quizblock/short_text.html' %}
-       {% endif %}
+        {% if block.rhetorical %}
+          </form>
+        {% endif %}
+      {% else %}
+        {% if question.is_short_text %}
+          {% include 'quizblock/short_text.html' %}
+        {% endif %}
 
-       {% if question.is_long_text %}
-         {% include 'quizblock/long_text.html' %}
-       {% endif %}
-     {% endif %}
-  </div>
+        {% if question.is_long_text %}
+          {% include 'quizblock/long_text.html' %}
+        {% endif %}
+      {% endif %}
+    </div>
 
-  {% if block.rhetorical %}
-    {% include 'quizblock/show_answer.html' %}
-  {% else %}
+    {% if block.rhetorical %}
+      {% include 'quizblock/show_answer.html' %}
+    {% else %}
       {% if response %}
         {% include 'quizblock/show_answer.html' %}
       {% endif %}
