@@ -146,7 +146,7 @@ class Question(models.Model):
         return self.text
       
     def display_number(self):
-        return self._order
+        return self._order + 1
 
     def edit_form(self,request=None):
       return QuestionForm(request, instance=self)
