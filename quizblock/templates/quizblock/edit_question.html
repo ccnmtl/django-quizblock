@@ -39,7 +39,12 @@ var saveOrder = function() {
 {% endblock %}
 {% block content %}
 
-<h2><a href="{% url edit-quiz question.quiz.id %}">Quiz</a> Question {{question.display_number}}: {{ question.text }}</h2>
+<div class="breadcrumbs">
+Nav: <a href="/edit{{question.quiz.pageblock.section.get_absolute_url}}">{{question.quiz.pageblock.section.label}}</a> ::
+<a href="{% url edit-quiz question.quiz.id %}">Quiz</a>
+</div>
+
+<h2>Question {{question.display_number}}: {{ question.text }}</h2>
 
 <form action="." method="post">
 <table width="100%">

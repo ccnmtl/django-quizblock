@@ -38,7 +38,13 @@ var saveOrder = function() {
 {% endblock %}
 
 {% block content %}
-<h2><a href="/edit{{section.get_absolute_url}}">{{section.label}}</a>: {{quiz.pageblock.label}}</h2>
+
+<div class="breadcrumbs">
+Nav: <a href="/edit{{quiz.pageblock.section.get_absolute_url}}">{{quiz.pageblock.section.label}}</a>
+</div>
+
+
+<h2>{{quiz.pageblock.label}}</h2>
 
 <ul id="questions" class="dragparent">
 {% for question in quiz.question_set.all %}
