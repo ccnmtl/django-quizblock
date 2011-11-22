@@ -51,8 +51,8 @@ def reorder_answers(request,id):
     if request.method != "POST":
         return HttpResponse("only use POST for this")
     question = get_object_or_404(Question,id=id)
-    keys = request.GET.keys()
-    keys.sort()
+    keys = [k for k in request.GET.keys() if k.startswith("answer_")]
+    keys.sort(key=lambda x:int(x.split("_")[1]))
     answers = [int(request.GET[k]) for k in keys if k.startswith('answer_')]
     question.update_answers_order(answers)
     return HttpResponse("ok")
