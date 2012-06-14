@@ -84,6 +84,16 @@ class Quiz(models.Model):
             rhetorical=request.POST.get('rhetorical', ''),
             allow_redo=request.POST.get('allow_redo', ''))
 
+    @classmethod
+    def create_from_dict(self, d):
+        q = Quiz.objects.create(
+            description=d.get('description', ''),
+            rhetorical=d.get('rhetorical', False),
+            allow_redo=d.get('allow_redo', True),
+            )
+        q.import_from_dict(d)
+        return q
+
     def edit(self, vals, files):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
