@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap %}
 {% block js %}
 
 
@@ -39,39 +40,43 @@ var saveOrder = function() {
 {% endblock %}
 {% block content %}
 
-<div class="breadcrumbs">
-Nav: <a href="/edit{{question.quiz.pageblock.section.get_absolute_url}}">{{question.quiz.pageblock.section.label}}</a> ::
-<a href="{% url edit-quiz question.quiz.id %}">Quiz</a>
-</div>
+<ul class="breadcrumb">
+<li><a href="/edit{{question.quiz.pageblock.section.get_absolute_url}}">{{question.quiz.pageblock.section.label}}</a>
+<span class="divider">/</span></li>
+<li><a href="{% url edit-quiz question.quiz.id %}">Edit Quiz</a><span class="divider">/</span></li>
+<li>Edit Question</li>
+</ul>
 
 <h2>Question {{question.display_number}}: {{ question.text }}</h2>
 
-<form action="." method="post">
+<form action="." method="post" class="well form-horizontal" >
 <table width="100%">
-{{ question.edit_form.as_table }}
+{{ question.edit_form|bootstrap }}
 </table>
-<input type="submit" value="save" />
+<input type="submit" value="save" class="btn btn-primary" />
 </form>
 
-{% if question.answerable %}
+{% if question.answer_set.count %}
 <h2>Answers</h2>
 <ul class="dragparent" id="answers">
 {% for answer in question.answer_set.all %}
 <li class="draggable" id="answer-{{answer.id}}">
 <span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-answer answer.id %}">delete</a>] 
 Answer {{ answer.display_number }}: 
-<a href="{% url edit-answer answer.id %}">{{answer.label}}</a></li>
+<a href="{% url edit-answer answer.id %}">{{answer.label}}</a>
+{% if answer.correct %}<i class="icon-ok"></i>{% endif %}
+</li>
 {% endfor %}
 </ul>
 {% endif %}
 
 {% if question.answerable %}
-<h2>Add Answer</h2>
-<form action="add_answer/" method="post">
+<h3>Add Answer</h3>
+<form action="add_answer/" method="post" class="well form-horizontal">
 <table width="100%">
-{{ question.add_answer_form.as_table}}
+{{ question.add_answer_form|bootstrap}}
 </table>
-<input type="submit" value="add answer" />
+<input type="submit" value="add answer" class="btn btn-primary" />
 </form>
 {% endif %}
 

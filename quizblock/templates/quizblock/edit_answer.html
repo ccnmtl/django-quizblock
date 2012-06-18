@@ -1,23 +1,30 @@
 {% extends "base.html" %}
+{% load bootstrap %}
 {% block content %}
 
-<div class="breadcrumbs">
-Nav: <a href="/edit{{answer.question.quiz.pageblock.section.get_absolute_url}}">{{answer.question.quiz.pageblock.section.label}}</a> ::
-<a href="{% url edit-quiz answer.question.quiz.id %}">Quiz</a> ::
-<a href="{% url edit-question answer.question.id %}">Question
-  {{answer.question.display_number}}: {{ answer.question.text }}</a>
-</div>
+<ul class="breadcrumb">
+	<li>
+		<a href="/edit{{answer.question.quiz.pageblock.section.get_absolute_url}}">{{answer.question.quiz.pageblock.section.label}}</a>
+		<span class="divider">/</span>
+	</li>
+	<li>
+		<a href="{% url edit-quiz answer.question.quiz.id %}">Edit Quiz</a>
+		<span class="divider">/</span>
+	</li>
+	<li>
+		<a href="{% url edit-question answer.question.id %}">Edit Question
+			{{answer.question.display_number}}: {{ answer.question.text }}</a>
+		</li>
+</ul>
 
 
-<h2>
-Answer {{answer.display_number}}: {{ answer.value }}
-</h2>
+<h2>Answer {{answer.display_number}}: {{ answer.value }}</h2>
 
-<form action="." method="post">
+<form action="." method="post" class="well form-horizontal" >
 <table width="100%">
-{{ answer.edit_form.as_table }}
+{{ answer.edit_form|bootstrap }}
 </table>
-<input type="submit" value="save" />
+<input type="submit" value="save" class="btn btn-primary" />
 </form>
 
 {% endblock %}
