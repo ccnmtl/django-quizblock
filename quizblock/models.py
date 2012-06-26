@@ -135,6 +135,12 @@ class Quiz(models.Model):
                                       label=a['label'],
                                       correct=a['correct'])
 
+    def summary_render(self):
+        if len(self.description) < 61:
+            return self.description
+        else:
+            return self.description[:61] + "..."
+
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz)
