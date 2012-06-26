@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load bootstrap %}
 
 {% block js %}
 
@@ -39,9 +40,12 @@ var saveOrder = function() {
 
 {% block content %}
 
-<div class="breadcrumbs">
-Nav: <a href="/edit{{quiz.pageblock.section.get_absolute_url}}">{{quiz.pageblock.section.label}}</a>
-</div>
+<ul class="breadcrumb">
+	<li><a href="/edit{{quiz.pageblock.section.get_absolute_url}}">{{quiz.pageblock.section.label}}</a>
+		<span class="divider">/</span>
+	</li>
+	<li>Edit Quiz</li>
+</ul>
 
 
 <h2>{{quiz.pageblock.label}}</h2>
@@ -55,12 +59,12 @@ Nav: <a href="/edit{{quiz.pageblock.section.get_absolute_url}}">{{quiz.pageblock
 {% endfor %}
 </ul>
 
-<form action="add_question/" method="post">
+<form action="add_question/" method="post" class="well form-horizontal">
 <h2>Add Question</h2>
 <table width="100%">
-{{ quiz.add_question_form.as_table}}
+{{ quiz.add_question_form|bootstrap}}
 </table>
-<input type="submit" value="add question" />
+<input type="submit" value="add question" class="btn btn-primary" />
 </form>
 
 <script type="text/javascript">
@@ -83,4 +87,8 @@ jQuery(function() {
 {% with "/edit" as menu_base %}
 {% include "main/menu.html" %}
 {% endwith %}
+{% endblock %}
+
+{% block primarynavrightextra %}
+						<li><a href="{{section.get_absolute_url}}">View</a></li>
 {% endblock %}
