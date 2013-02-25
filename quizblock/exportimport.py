@@ -12,8 +12,9 @@ class QuizExporter(object):
         filename = "pageblocks/%s-description.txt" % block.pageblock().pk
         zipfile.writestr(filename, block.description.encode("utf8"))
 
-        print >> (xmlfile,
-                  u"""<quiz rhetorical="%s" description_src="%s">""" % (
+        print >> (
+            xmlfile,
+            u"""<quiz rhetorical="%s" description_src="%s">""" % (
                 block.rhetorical, filename))
 
         for question in block.question_set.all():

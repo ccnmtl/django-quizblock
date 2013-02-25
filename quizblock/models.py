@@ -39,7 +39,7 @@ class Quiz(models.Model):
                 question = Question.objects.get(id=qid)
                 # it might make more sense to just accept a QueryDict
                 # instead of a dict so we can use getlist()
-                if type(data[k]) == type([]):
+                if isinstance(data[k], list):
                     for v in data[k]:
                         Response.objects.create(
                             submission=s,
@@ -90,7 +90,7 @@ class Quiz(models.Model):
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
             allow_redo=d.get('allow_redo', True),
-            )
+        )
         q.import_from_dict(d)
         return q
 
@@ -154,7 +154,7 @@ class Question(models.Model):
              "Multiple Choice: Single answer (dropdown)"),
             ("short text", "Short Text"),
             ("long text", "Long Text"),
-            ))
+        ))
     explanation = models.TextField(blank=True)
     intro_text = models.TextField(blank=True)
 
@@ -184,7 +184,7 @@ class Question(models.Model):
 
     def correct_answer_letter(self):
         if (self.question_type != "single choice"
-            or self.answer_set.count() == 0):
+                or self.answer_set.count() == 0):
             return None
         return chr(ord('A') + self.correct_answer_number())
 
@@ -225,7 +225,7 @@ class Question(models.Model):
             explanation=self.explanation,
             intro_text=self.intro_text,
             answers=[a.as_dict() for a in self.answer_set.all()]
-            )
+        )
 
 
 class Answer(models.Model):

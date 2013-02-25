@@ -44,7 +44,7 @@ class IfAnswerInNode(template.Node):
         q = r.question
         a = context[self.answer]
         u = context['request'].user
-        if a.value in [r.value for r in q.user_responses(u)]:
+        if a.value in [resp.value for resp in q.user_responses(u)]:
             return self.nodelist_true.render(context)
         else:
             return self.nodelist_false.render(context)

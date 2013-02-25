@@ -10,8 +10,8 @@ class AnswerInlineForm(forms.ModelForm):
     class Meta:
         model = Answer
         widgets = {
-           'label': forms.Textarea(attrs={'rows': 1}),
-           }
+            'label': forms.Textarea(attrs={'rows': 1}),
+        }
 
 
 class AnswerInlineAdmin(admin.TabularInline):
@@ -20,17 +20,17 @@ class AnswerInlineAdmin(admin.TabularInline):
     extra = 0
     template = 'admin/quizblock/answer/edit_inline/tabular.html'
     widgets = {
-       'label': forms.Textarea(attrs={'rows': 1}),
+        'label': forms.Textarea(attrs={'rows': 1}),
     }
 
     def change_view(self, request, object_id, extra_context=None):
         my_context = {
-           'is_iframe': '_iframe' in request.REQUEST
+            'is_iframe': '_iframe' in request.REQUEST
         }
         return super(AnswerInlineAdmin, self).change_view(
-           request,
-           object_id,
-           extra_context=my_context)
+            request,
+            object_id,
+            extra_context=my_context)
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -54,9 +54,9 @@ class QuestionModelForm(forms.ModelForm):
     class Meta:
         model = Question
         widgets = {
-           'text': forms.Textarea(attrs={'rows': 1}),
-           'explanation': forms.Textarea(attrs={'rows': 1}),
-           'intro_text': forms.Textarea(attrs={'rows': 1}),
+            'text': forms.Textarea(attrs={'rows': 1}),
+            'explanation': forms.Textarea(attrs={'rows': 1}),
+            'intro_text': forms.Textarea(attrs={'rows': 1}),
         }
 
         fields = ('question_type', 'intro_text', 'text', 'explanation')
@@ -74,7 +74,7 @@ class QuizModelForm(forms.ModelForm):
     class Meta:
         model = Quiz
         widgets = {
-           'description': forms.Textarea(attrs={'rows': 3})
+            'description': forms.Textarea(attrs={'rows': 3})
         }
 
 
