@@ -11,6 +11,7 @@ class AnswerInlineForm(forms.ModelForm):
         model = Answer
         widgets = {
             'label': forms.Textarea(attrs={'rows': 1}),
+            'explanation': forms.Textarea(attrs={'rows': 1}),
         }
 
 
