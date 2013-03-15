@@ -72,9 +72,9 @@ Answer {{ answer.display_number }}:
 
 {% if question.answerable %}
 <h3>Add Answer</h3>
-<form action="add_answer/" method="post" class="well form-horizontal">
+<form action="{% url add-answer-to-question question.id %}" method="post" class="well form-horizontal">
 <table width="100%">
-{{ question.add_answer_form|bootstrap}}
+{{ answer_form|bootstrap}}
 </table>
 <input type="submit" value="add answer" class="btn btn-primary" />
 </form>

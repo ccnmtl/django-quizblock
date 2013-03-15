@@ -230,7 +230,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
-    value = models.CharField(max_length=256, blank=True)
+    value = models.CharField(max_length=256)
     label = models.TextField(blank=True)
     correct = models.BooleanField(default=False)
 
@@ -286,3 +286,9 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         exclude = ("question",)
+
+    def clean(self):
+        if not 'value' in self.cleaned_data:
+            raise forms.ValidationError('Please enter a meaningful value for this answer.')
+        else: 
+            return self.cleaned_data

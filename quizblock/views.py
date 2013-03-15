@@ -98,29 +98,44 @@ def edit_question(request, id):
         question.save()
         return HttpResponseRedirect(reverse("edit-question",
                                             args=[question.id]))
-    return dict(question=question)
+    return dict(question=question, answer_form=question.add_answer_form())
 
 
+@rendered_with('quizblock/edit_question.html')
 def add_answer_to_question(request, id):
     question = get_object_or_404(Question, id=id)
-    form = question.add_answer_form(request.POST)
-    if form.is_valid():
-        answer = form.save(commit=False)
-        answer.question = question
-        if answer.label == '':
-            answer.label = answer.value
-        answer.save()
-    return HttpResponseRedirect(reverse("edit-question",
-                                        args=[question.id]))
+    if request.method == "POST":    
+        form = question.add_answer_form(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            if answer.label == '':
+                answer.label = answer.value
+            answer.save()
+            return HttpResponseRedirect(reverse("edit-question",
+                                            args=[question.id]))
+    else:
+        form = question.add_answer_form()
 
+    return dict(question=question,answer_form=form)
 
 @rendered_with('quizblock/edit_answer.html')
 def edit_answer(request, id):
     answer = get_object_or_404(Answer, id=id)
+    form = answer.edit_form(request.POST)   
     if request.method == "POST":
-        form = answer.edit_form(request.POST)
-        answer = form.save(commit=False)
-        answer.save()
-        return HttpResponseRedirect(reverse("edit-answer",
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.save()
+            return HttpResponseRedirect(reverse("edit-answer",
                                             args=[answer.id]))
-    return dict(answer=answer)
+    else:
+        form = answer.edit_form()
+
+    return dict(answer_form=form, answer=answer)
+
+
+
+
+
+
