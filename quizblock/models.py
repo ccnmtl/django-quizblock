@@ -289,6 +289,7 @@ class AnswerForm(forms.ModelForm):
 
     def clean(self):
         if not 'value' in self.cleaned_data:
-            raise forms.ValidationError('Please enter a meaningful value for this answer.')
-        else: 
+            raise forms.ValidationError(
+                'Please enter a meaningful value for this answer.')
+        else:
             return self.cleaned_data
