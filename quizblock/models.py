@@ -130,10 +130,13 @@ class Quiz(models.Model):
                 explanation=q['explanation'],
                 intro_text=q['intro_text'])
             for a in q['answers']:
-                Answer.objects.create(question=question,
-                                      value=a['value'],
-                                      label=a['label'],
-                                      correct=a['correct'])
+                x = Answer.objects.create(question=question,
+                                          value=a['value'],
+                                          label=a['label'],
+                                          correct=a['correct'])
+                if 'explanation' in a:
+                    x.explanation = a['explanation']
+                    x.save()
 
     def summary_render(self):
         if len(self.description) < 61:
@@ -246,7 +249,10 @@ class Answer(models.Model):
         return AnswerForm(request, instance=self)
 
     def as_dict(self):
-        return dict(value=self.value, label=self.label, correct=self.correct)
+        return dict(value=self.value,
+                    label=self.label,
+                    correct=self.correct,
+                    explanation=self.explanation)
 
 
 class Submission(models.Model):
