@@ -233,6 +233,7 @@ class Answer(models.Model):
     value = models.CharField(max_length=256)
     label = models.TextField(blank=True)
     correct = models.BooleanField(default=False)
+    explanation = models.TextField(blank=True)
 
     class Meta:
         ordering = ('question',)
