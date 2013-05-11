@@ -38,8 +38,11 @@ class QuizExporter(object):
 
             for answer in question.answer_set.all():
                 print >> xmlfile, \
-                    u"""<answer label="%s" value="%s" correct="%s" />""" % (
-                    sanitize(answer.label), sanitize(answer.value),
+                    u"""<answer label="%s" value="%s"
+                    correct="%s" explanation="%s"/>""" % (
+                    sanitize(answer.label),
+                    sanitize(answer.value),
+                    sanitize(answer.explanation),
                     answer.correct)
 
             print >> xmlfile, "</question>"
@@ -76,9 +79,13 @@ class QuizExporter(object):
                 label = answer.get("label")
                 value = answer.get("value")
                 correct = asbool(answer.get("correct"))
+                explanation = answer.get("explanation")
                 answer = quizblock.Answer(
                     question=question,
-                    value=value, label=label, correct=correct)
+                    value=value,
+                    label=label,
+                    correct=correct,
+                    explanation=explanation)
                 answer.save()
 
         return q
