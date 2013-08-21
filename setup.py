@@ -23,7 +23,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
@@ -38,8 +38,8 @@ setup(
     license = "BSD",
     platforms = ["any"],
     zip_safe=False,
-#    package_data = {'' : ['*.*']},
-    packages=['quizblock'],
+    package_data = {'' : ['*.*']},
+    packages=find_packages(),
     test_suite='nose.collector',
     include_package_data=True,
 
