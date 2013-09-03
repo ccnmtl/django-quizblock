@@ -22,14 +22,22 @@ def main():
             'quizblock',
             'django_nose',
             'django.contrib.markup',
+            'django_jenkins',
         ),
         TEST_RUNNER = 'django_nose.NoseTestSuiteRunner',
 
         NOSE_ARGS = [
             '--with-coverage',
             '--cover-package=quizblock',
-            ],
-
+        ],
+        JENKINS_TASKS = (
+            'django_jenkins.tasks.with_coverage',
+            'django_jenkins.tasks.django_tests',
+        ),
+        PROJECT_APPS = [
+            'quizblock',
+        ],
+        COVERAGE_EXCLUDES_FOLDERS = ['migrations'],
         ROOT_URLCONF = [],
         PAGEBLOCKS = ['pagetree.TestBlock', ],
         SOUTH_TESTS_MIGRATE=False,
@@ -48,7 +56,7 @@ def main():
     )
 
     # Fire off the tests
-    call_command('test', 'quizblock')
+    call_command('jenkins')
 
 if __name__ == '__main__':
     main()
