@@ -63,6 +63,24 @@ class TestBasics(TestCase):
         self.assertEqual(q.rhetorical, '1')
         self.assertEqual(q.allow_redo, '0')
 
+    def test_edit_form(self):
+        # can't figure out how to test this one since it depends on
+        # urls being set up
+
+        # q = Quiz()
+        # f = q.edit_form()
+        # self.assertTrue('description' in f.fields)
+        pass
+
+    def test_redirect_to_self_on_submit(self):
+        q = Quiz()
+        self.assertTrue(q.redirect_to_self_on_submit())
+
+    def test_add_question_form(self):
+        q = Quiz()
+        f = q.add_question_form(None)
+        self.assertTrue('text' in f.fields)
+
 
 class UserTests(TestCase):
     def setUp(self):
@@ -71,7 +89,7 @@ class UserTests(TestCase):
     def test_submit(self):
         q = Quiz.objects.create()
         self.assertFalse(q.unlocked(self.u))
-        q.submit(self.u, dict())
+        q.submit(self.u, dict(foo='bar'))
         self.assertTrue(q.unlocked(self.u))
         q.clear_user_submissions(self.u)
         self.assertFalse(q.unlocked(self.u))
@@ -110,17 +128,33 @@ class QuestionTest(TestCase):
             quiz=quiz, text="foo", question_type="long text")
         self.assertEqual(question.correct_answer_values(), [])
 
-    def test_correct_answer_number(self):
+    def test_correct_answer_number_wrong_type(self):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="long text")
         self.assertEqual(question.correct_answer_number(), None)
 
-    def test_correct_answer_letter(self):
+    def test_correct_answer_number(self):
+        quiz = Quiz.objects.create()
+        question = Question.objects.create(
+            quiz=quiz, text="foo", question_type="single choice")
+        Answer.objects.create(question=question, value='1', label='one',
+                              correct=True)
+        self.assertEqual(question.correct_answer_number(), 0)
+
+    def test_correct_answer_letter_wrong_type(self):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="long text")
         self.assertEqual(question.correct_answer_letter(), None)
+
+    def test_correct_answer_letter(self):
+        quiz = Quiz.objects.create()
+        question = Question.objects.create(
+            quiz=quiz, text="foo", question_type="single choice")
+        Answer.objects.create(question=question, value='1', label='one',
+                              correct=True)
+        self.assertEqual(question.correct_answer_letter(), 'A')
 
     def test_update_answers_order(self):
         quiz = Quiz.objects.create()
@@ -180,6 +214,19 @@ class AnswerTest(TestCase):
         d = answer.as_dict()
         self.assertEqual(d['label'], "an answer")
         self.assertFalse(d['correct'])
+
+    def test_quiz_round_trip(self):
+        quiz = Quiz.objects.create()
+        question = Question.objects.create(
+            quiz=quiz, text="foo", question_type="single choice")
+        Answer.objects.create(question=question, label="an answer")
+        Answer.objects.create(
+            question=question, label="another answer",
+            explanation="an explanation")
+        d = quiz.as_dict()
+        quiz2 = Quiz.objects.create()
+        quiz2.import_from_dict(d)
+        self.assertEqual(quiz2.question_set.count(), 1)
 
 
 class SubmissionTest(TestCase):
