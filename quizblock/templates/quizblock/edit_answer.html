@@ -8,11 +8,11 @@
 		<span class="divider">/</span>
 	</li>
 	<li>
-		<a href="{% url edit-quiz answer.question.quiz.id %}">Edit Quiz</a>
+		<a href="{% url 'edit-quiz' answer.question.quiz.id %}">Edit Quiz</a>
 		<span class="divider">/</span>
 	</li>
 	<li>
-		<a href="{% url edit-question answer.question.id %}">Edit Question
+		<a href="{% url 'edit-question' answer.question.id %}">Edit Question
 			{{answer.question.display_number}}: {{ answer.question.text }}</a>
 		</li>
 </ul>

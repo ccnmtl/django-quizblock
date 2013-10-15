@@ -23,7 +23,7 @@
 
     <script type="text/javascript">
         var saveOrder = function() {
-            var url = "{% url reorder-questions quiz.id %}?";
+            var url = "{% url 'reorder-questions' quiz.id %}?";
             var worktodo = 0;
             jQuery("#questions li").each(function(index,element) {
                worktodo = 1;
@@ -68,9 +68,9 @@
 <ul id="questions" class="dragparent">
 {% for question in quiz.question_set.all %}
     <li class="draggable" id="question-{{question.id}}">
-    <span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url delete-question question.id %}">delete</a>] 
+    <span title="drag to reorder pageblocks" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url 'delete-question' question.id %}">delete</a>] 
     Question {{ question.display_number }}: 
-    <a href="{% url edit-question question.id %}">{{question.text|truncatewords:5}}</a></li>
+    <a href="{% url 'edit-question' question.id %}">{{question.text|truncatewords:5}}</a></li>
 {% endfor %}
 </ul>
 
