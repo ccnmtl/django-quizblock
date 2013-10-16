@@ -6,3 +6,4 @@ dist/
 ve
 .coverage
 reports/
+build
