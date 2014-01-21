@@ -264,6 +264,21 @@ class Submission(models.Model):
         return "quiz %d submission by %s at %s" % (self.quiz.id,
                                                    unicode(self.user),
                                                    self.submitted)
+        
+    def is_correct(self):
+        return self.percent_correct() == 100
+    
+    def percent_correct(self):        
+        return round(self.correct_answer_count() /
+                     self.quiz.question_set.count() * 100, 0)    
+        
+    def correct_answer_count(self):
+        correct_answers = 0
+        for response in self.response_set.all():
+            if response.is_correct():
+                correct_answers += 1
+                        
+        return correct_answers
 
 
 class Response(models.Model):

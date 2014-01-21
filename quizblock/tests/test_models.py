@@ -236,6 +236,56 @@ class SubmissionTest(TestCase):
         s = Submission.objects.create(quiz=quiz, user=user)
         self.assertTrue(
             str(s).startswith("quiz %d submission by testuser" % quiz.id))
+        
+    def test_is_correct(self):
+        quiz = Quiz.objects.create()
+        question = Question.objects.create(
+            quiz=quiz, text="foo", question_type="single choice")
+        Answer.objects.create(question=question, label="an answer")
+        user = User.objects.create(username="testuser")
+        s = Submission.objects.create(quiz=quiz, user=user)
+        response = Response.objects.create(
+            question=question, submission=s, value="an answer")
+        self.assertFalse(response.is_correct())
+        
+    def test_correct_answer_count(self):
+        quiz = Quiz.objects.create()
+        
+        question_one = Question.objects.create(
+            quiz=quiz, text="foo", question_type="single choice")
+        Answer.objects.create(question=question_one, value="1",
+                              correct=True, label="correct")
+        Answer.objects.create(question=question_one, value="2",
+                              correct=False, label="incorrect")
+        
+        question_two = Question.objects.create(
+            quiz=quiz, text="bar", question_type="single choice")
+        Answer.objects.create(question=question_two, value="1",
+                              correct=True, label="correct")
+        Answer.objects.create(question=question_two, value="2",
+                              correct=False, label="incorrect")
+        
+        question_three = Question.objects.create(
+            quiz=quiz, text="baz", question_type="single choice")
+        Answer.objects.create(question=question_three, value="1",
+                              correct=True, label="correct")
+        Answer.objects.create(question=question_three, value="2",
+                              correct=False, label="incorrect")
+        
+        user = User.objects.create(username="testuser")
+        s = Submission.objects.create(quiz=quiz, user=user)
+        response = Response.objects.create(
+            question=question_one, submission=s, value="1")
+        self.assertEquals(s.correct_answer_count(), 1)
+        self.assertFalse(s.is_correct())
+        response = Response.objects.create(
+            question=question_two, submission=s, value="1")
+        self.assertEquals(s.correct_answer_count(), 2)
+        self.assertFalse(s.is_correct())
+        response = Response.objects.create(
+            question=question_three, submission=s, value="1")
+        self.assertEquals(s.correct_answer_count(), 3)
+        self.assertTrue(s.is_correct())
 
 
 class ResponseTest(TestCase):

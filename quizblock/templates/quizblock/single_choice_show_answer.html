@@ -2,7 +2,7 @@
 {% if block.rhetorical %}
       <div class="casesanswerdisplay">
         <a href="#q{{question.id}}" class="moretoggle">Show answer &gt;&gt;</a>
-        <div id="q{{question.id}}" class="toggleable">
+        <div id="q{{question.id}}" class="toggleable" style="display: none">
           <p>
             {% if question.correct_answer_letter %}
               <i>The correct answer is {{question.correct_answer_letter}}:</i>
