@@ -1,10 +1,10 @@
-from django.db import models
-from pagetree.models import PageBlock
+from datetime import datetime
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
-from django import forms
-from datetime import datetime
 from django.core.urlresolvers import reverse
+from django.db import models
+from pagetree.models import PageBlock
 
 
 class Quiz(models.Model):
@@ -216,10 +216,14 @@ class Question(models.Model):
         return self.question_type == "multiple choice"
 
     def user_responses(self, user):
-        submission = Submission.objects.filter(
-            user=user,
-            quiz=self.quiz).order_by("-submitted")[0]
-        return Response.objects.filter(question=self, submission=submission)
+        qs = Submission.objects.filter(user=user,
+                                       quiz=self.quiz).order_by("-submitted")
+        if len(qs) == 0:
+            return Response.objects.none()
+        else:
+            submission = qs[0]
+            return Response.objects.filter(question=self,
+                                           submission=submission)
 
     def as_dict(self):
         return dict(

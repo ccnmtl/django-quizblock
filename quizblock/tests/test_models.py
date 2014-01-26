@@ -189,6 +189,22 @@ class QuestionTest(TestCase):
         self.assertEqual(d['text'], "foo")
         self.assertEqual(d['question_type'], "long text")
 
+    def test_user_responses(self):
+        user = User.objects.create(username="testuser")
+        quiz = Quiz.objects.create()
+        q1 = Question.objects.create(quiz=quiz, text="question_one",
+                                     question_type="single choice")
+        Answer.objects.create(question=q1, label="a", value="a", correct=True)
+        Answer.objects.create(question=q1, label="b", value="b")
+
+        self.assertEquals(len(q1.user_responses(user)), 0)
+
+        s = Submission.objects.create(quiz=quiz, user=user)
+        self.assertEquals(len(q1.user_responses(user)), 0)
+
+        Response.objects.create(question=q1, submission=s, value="a")
+        self.assertEquals(len(q1.user_responses(user)), 1)
+
 
 class AnswerTest(TestCase):
     def test_unicode(self):
