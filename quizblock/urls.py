@@ -1,3 +1,4 @@
+# flake8: noqa
 try:
     from django.conf.urls import patterns
 except ImportError:
