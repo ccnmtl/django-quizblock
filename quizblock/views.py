@@ -3,22 +3,19 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView
 
 
 class EditQuizView(DetailView):
     model = Quiz
 
 
-def delete_question(request, id):
-    question = get_object_or_404(Question, id=id)
-    if request.method == "POST":
-        quiz = question.quiz
-        question.delete()
-        return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
-    return HttpResponse("""
-<html><body><form action="." method="post">Are you Sure?
-<input type="submit" value="Yes, delete it" /></form></body></html>
-""")
+class DeleteQuestionView(DeleteView):
+    model = Question
+
+    def get_success_url(self):
+        questionnaire = self.object.quiz
+        return reverse("edit-quiz", args=[quiz.id])
 
 
 def delete_answer(request, id):
