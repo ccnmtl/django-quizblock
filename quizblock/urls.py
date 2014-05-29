@@ -1,6 +1,6 @@
 from django.conf.urls import patterns
 from .views import (
-    EditQuizView, DeleteQuestionView
+    EditQuizView, DeleteQuestionView, DeleteAnswerView,
 )
 
 urlpatterns = patterns(
@@ -17,6 +17,7 @@ urlpatterns = patterns(
      'reorder-answer'),
     (r'^reorder_questions/(?P<pk>\d+)/$', 'reorder_questions', {},
      'reorder-questions'),
-    (r'^delete_answer/(?P<pk>\d+)/$', 'delete_answer', {}, 'delete-answer'),
+    (r'^delete_answer/(?P<pk>\d+)/$', DeleteAnswerView.as_view(),
+     {}, 'delete-answer'),
     (r'^edit_answer/(?P<pk>\d+)/$', 'edit_answer', {}, 'edit-answer'),
 )

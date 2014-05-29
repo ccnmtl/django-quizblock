@@ -18,17 +18,12 @@ class DeleteQuestionView(DeleteView):
         return reverse("edit-quiz", args=[quiz.id])
 
 
-def delete_answer(request, pk):
-    answer = get_object_or_404(Answer, pk=pk)
-    if request.method == "POST":
-        question = answer.question
-        answer.delete()
-        return HttpResponseRedirect(reverse("edit-question",
-                                            args=[question.id]))
-    return HttpResponse("""
-<html><body><form action="." method="post">Are you Sure?
-<input type="submit" value="Yes, delete it" /></form></body></html>
-""")
+class DeleteAnswerView(DeleteView):
+    model = Answer
+
+    def get_success_url(self):
+        question = self.object.question
+        return reverse("edit-question", args=[question.id])
 
 
 def reorder_answers(request, pk):
