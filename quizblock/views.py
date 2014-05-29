@@ -51,14 +51,15 @@ class ReorderQuestionsView(View):
         return HttpResponse("ok")
 
 
-def add_question_to_quiz(request, pk):
-    quiz = get_object_or_404(Quiz, pk=pk)
-    form = quiz.add_question_form(request.POST)
-    if form.is_valid():
-        question = form.save(commit=False)
-        question.quiz = quiz
-        question.save()
-    return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
+class AddQuestionToQuizView(View):
+    def post(self, request, pk):
+        quiz = get_object_or_404(Quiz, pk=pk)
+        form = quiz.add_question_form(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.quiz = quiz
+            question.save()
+        return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
 
 
 def edit_question(request, pk):
