@@ -38,17 +38,17 @@ class ReorderAnswersView(View):
         return HttpResponse("ok")
 
 
-def reorder_questions(request, pk):
-    if request.method != "POST":
-        return HttpResponse("only use POST for this", status=400)
-    quiz = get_object_or_404(Quiz, pk=pk)
-    keys = request.GET.keys()
-    question_keys = [int(k[len('question_'):]) for k in keys
-                     if k.startswith('question_')]
-    question_keys.sort()
-    questions = [int(request.GET['question_' + str(k)]) for k in question_keys]
-    quiz.update_questions_order(questions)
-    return HttpResponse("ok")
+class ReorderQuestionsView(View):
+    def post(self, request, pk):
+        quiz = get_object_or_404(Quiz, pk=pk)
+        keys = request.GET.keys()
+        question_keys = [int(k[len('question_'):]) for k in keys
+                         if k.startswith('question_')]
+        question_keys.sort()
+        questions = [int(request.GET['question_' + str(k)])
+                     for k in question_keys]
+        quiz.update_questions_order(questions)
+        return HttpResponse("ok")
 
 
 def add_question_to_quiz(request, pk):
