@@ -63,11 +63,13 @@ class AddQuestionToQuizView(View):
 
 
 class EditQuestionView(View):
+    template_name = "quizblock/edit_question.html"
+
     def get(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
         return render(
             request,
-            'quizblock/edit_question.html',
+            self.template_name,
             dict(question=question, answer_form=question.add_answer_form()))
 
     def post(self, request, pk):
@@ -80,12 +82,14 @@ class EditQuestionView(View):
 
 
 class AddAnswerToQuestionView(View):
+    template_name = 'quizblock/edit_question.html'
+
     def get(self, request, pk):
         question = get_object_or_404(Question, pk=pk)
         form = question.add_answer_form()
         return render(
             request,
-            'quizblock/edit_question.html',
+            self.template_name,
             dict(question=question, answer_form=form))
 
     def post(self, request, pk):
@@ -101,17 +105,19 @@ class AddAnswerToQuestionView(View):
                                                 args=[question.id]))
         return render(
             request,
-            'quizblock/edit_question.html',
+            self.template_name,
             dict(question=question, answer_form=form))
 
 
 class EditAnswerView(View):
+    template_name = 'quizblock/edit_answer.html'
+
     def get(self, request, pk):
         answer = get_object_or_404(Answer, pk=pk)
         form = answer.edit_form()
         return render(
             request,
-            'quizblock/edit_answer.html',
+            self.template_name,
             dict(answer_form=form, answer=answer))
 
     def post(self, request, pk):
@@ -124,5 +130,5 @@ class EditAnswerView(View):
                                                 args=[answer.id]))
         return render(
             request,
-            'quizblock/edit_answer.html',
+            self.template_name,
             dict(answer_form=form, answer=answer))
