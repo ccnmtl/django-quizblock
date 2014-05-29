@@ -40,10 +40,10 @@ class QuizExporter(object):
                 print >> xmlfile, \
                     u"""<answer label="%s" value="%s"
                     correct="%s" explanation="%s"/>""" % (
-                        sanitize(answer.label),
-                        sanitize(answer.value),
-                        sanitize(answer.explanation),
-                        answer.correct)
+                    sanitize(answer.label),
+                    sanitize(answer.value),
+                    sanitize(answer.explanation),
+                    answer.correct)
 
             print >> xmlfile, "</question>"
         print >> xmlfile, "</quiz>"

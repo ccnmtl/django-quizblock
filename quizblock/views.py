@@ -15,7 +15,7 @@ class DeleteQuestionView(DeleteView):
     model = Question
 
     def get_success_url(self):
-        questionnaire = self.object.quiz
+        quiz = self.object.quiz
         return reverse("edit-quiz", args=[quiz.id])
 
 
@@ -126,4 +126,3 @@ class EditAnswerView(View):
             request,
             'quizblock/edit_answer.html',
             dict(answer_form=form, answer=answer))
-
