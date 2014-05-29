@@ -2,15 +2,11 @@ from models import Quiz, Question, Answer
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.generic.detail import DetailView
 
 
-def edit_quiz(request, id):
-    quiz = get_object_or_404(Quiz, id=id)
-    section = quiz.pageblock().section
-    return render(
-        request,
-        'quizblock/edit_quiz.html',
-        dict(quiz=quiz, section=section))
+class EditQuizView(DetailView):
+    model = Quiz
 
 
 def delete_question(request, id):
