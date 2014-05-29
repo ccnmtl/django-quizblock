@@ -62,18 +62,21 @@ class AddQuestionToQuizView(View):
         return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
 
 
-def edit_question(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    if request.method == "POST":
+class EditQuestionView(View):
+    def get(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
+        return render(
+            request,
+            'quizblock/edit_question.html',
+            dict(question=question, answer_form=question.add_answer_form()))
+
+    def post(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
         form = question.edit_form(request.POST)
         question = form.save(commit=False)
         question.save()
         return HttpResponseRedirect(reverse("edit-question",
                                             args=[question.id]))
-    return render(
-        request,
-        'quizblock/edit_question.html',
-        dict(question=question, answer_form=question.add_answer_form()))
 
 
 def add_answer_to_question(request, pk):
