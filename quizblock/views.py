@@ -79,9 +79,17 @@ class EditQuestionView(View):
                                             args=[question.id]))
 
 
-def add_answer_to_question(request, pk):
-    question = get_object_or_404(Question, pk=pk)
-    if request.method == "POST":
+class AddAnswerToQuestionView(View):
+    def get(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
+        form = question.add_answer_form()
+        return render(
+            request,
+            'quizblock/edit_question.html',
+            dict(question=question, answer_form=form))
+
+    def post(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
         form = question.add_answer_form(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
@@ -91,26 +99,31 @@ def add_answer_to_question(request, pk):
             answer.save()
             return HttpResponseRedirect(reverse("edit-question",
                                                 args=[question.id]))
-    else:
-        form = question.add_answer_form()
-    return render(
-        request,
-        'quizblock/edit_question.html',
-        dict(question=question, answer_form=form))
+        return render(
+            request,
+            'quizblock/edit_question.html',
+            dict(question=question, answer_form=form))
 
 
-def edit_answer(request, pk):
-    answer = get_object_or_404(Answer, pk=pk)
-    form = answer.edit_form(request.POST)
-    if request.method == "POST":
+class EditAnswerView(View):
+    def get(self, request, pk):
+        answer = get_object_or_404(Answer, pk=pk)
+        form = answer.edit_form()
+        return render(
+            request,
+            'quizblock/edit_answer.html',
+            dict(answer_form=form, answer=answer))
+
+    def post(self, request, pk):
+        answer = get_object_or_404(Answer, pk=pk)
+        form = answer.edit_form(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
             answer.save()
             return HttpResponseRedirect(reverse("edit-answer",
                                                 args=[answer.id]))
-    else:
-        form = answer.edit_form()
-    return render(
-        request,
-        'quizblock/edit_answer.html',
-        dict(answer_form=form, answer=answer))
+        return render(
+            request,
+            'quizblock/edit_answer.html',
+            dict(answer_form=form, answer=answer))
+

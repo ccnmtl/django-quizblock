@@ -3,6 +3,7 @@ from .views import (
     EditQuizView, DeleteQuestionView, DeleteAnswerView,
     ReorderAnswersView, ReorderQuestionsView,
     AddQuestionToQuizView, EditQuestionView,
+    AddAnswerToQuestionView, EditAnswerView,
 )
 
 urlpatterns = patterns(
@@ -11,7 +12,7 @@ urlpatterns = patterns(
     (r'^edit_quiz/(?P<pk>\d+)/add_question/$', AddQuestionToQuizView, {},
      'add-question-to-quiz'),
     (r'^edit_question/(?P<pk>\d+)/$', EditQuestionView, {}, 'edit-question'),
-    (r'^edit_question/(?P<pk>\d+)/add_answer/$', 'add_answer_to_question', {},
+    (r'^edit_question/(?P<pk>\d+)/add_answer/$', AddAnswerToQuestionView, {},
      'add-answer-to-question'),
     (r'^delete_question/(?P<pk>\d+)/$', DeleteQuestionView.as_view(), {},
      'delete-question'),
@@ -21,5 +22,5 @@ urlpatterns = patterns(
      'reorder-questions'),
     (r'^delete_answer/(?P<pk>\d+)/$', DeleteAnswerView.as_view(),
      {}, 'delete-answer'),
-    (r'^edit_answer/(?P<pk>\d+)/$', 'edit_answer', {}, 'edit-answer'),
+    (r'^edit_answer/(?P<pk>\d+)/$', EditAnswerView, {}, 'edit-answer'),
 )
