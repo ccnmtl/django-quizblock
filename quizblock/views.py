@@ -27,28 +27,33 @@ class DeleteAnswerView(DeleteView):
         return reverse("edit-question", args=[question.id])
 
 
-class ReorderAnswersView(View):
+class ReorderItemsView(View):
     def post(self, request, pk):
-        question = get_object_or_404(Question, pk=pk)
-        keys = [k for k in request.GET.keys() if k.startswith("answer_")]
-        keys.sort(key=lambda x: int(x.split("_")[1]))
-        answers = [int(request.GET[k])
-                   for k in keys if k.startswith('answer_')]
-        question.update_answers_order(answers)
+        parent = get_object_or_404(self.parent_model, pk=pk)
+        keys = [int(k[len(self.prefix):])
+                for k in request.GET.keys()
+                if k.startswith(self.prefix)]
+        keys.sort()
+        items = [int(request.GET[k])
+                 for k in keys if k.startswith(self.prefix)]
+        self.update_order(parent, items)
         return HttpResponse("ok")
 
 
-class ReorderQuestionsView(View):
-    def post(self, request, pk):
-        quiz = get_object_or_404(Quiz, pk=pk)
-        keys = request.GET.keys()
-        question_keys = [int(k[len('question_'):]) for k in keys
-                         if k.startswith('question_')]
-        question_keys.sort()
-        questions = [int(request.GET['question_' + str(k)])
-                     for k in question_keys]
-        quiz.update_questions_order(questions)
-        return HttpResponse("ok")
+class ReorderAnswersView(ReorderItemsView):
+    parent_model = Question
+    prefix = "answer_"
+
+    def update_order(self, parent, items):
+        parent.update_answers_order(items)
+
+
+class ReorderQuestionsView(ReorderItemsView):
+    parent_model = Quiz
+    prefix = "question_"
+
+    def update_order(self, parent, items):
+        parent.update_questions_order(items)
 
 
 class AddQuestionToQuizView(View):
