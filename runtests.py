@@ -21,8 +21,8 @@ def main():
             'pagetree',
             'quizblock',
             'django_nose',
-            'django.contrib.markup',
             'django_jenkins',
+            'django_markwhat',
         ),
         TEST_RUNNER = 'django_nose.NoseTestSuiteRunner',
 
@@ -32,7 +32,6 @@ def main():
         ],
         JENKINS_TASKS = (
             'django_jenkins.tasks.with_coverage',
-            'django_jenkins.tasks.django_tests',
         ),
         PROJECT_APPS = [
             'quizblock',
