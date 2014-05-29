@@ -18,8 +18,8 @@ class DeleteQuestionView(DeleteView):
         return reverse("edit-quiz", args=[quiz.id])
 
 
-def delete_answer(request, id):
-    answer = get_object_or_404(Answer, id=id)
+def delete_answer(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
     if request.method == "POST":
         question = answer.question
         answer.delete()
@@ -31,10 +31,10 @@ def delete_answer(request, id):
 """)
 
 
-def reorder_answers(request, id):
+def reorder_answers(request, pk):
     if request.method != "POST":
         return HttpResponse("only use POST for this")
-    question = get_object_or_404(Question, id=id)
+    question = get_object_or_404(Question, pk=pk)
     keys = [k for k in request.GET.keys() if k.startswith("answer_")]
     keys.sort(key=lambda x: int(x.split("_")[1]))
     answers = [int(request.GET[k]) for k in keys if k.startswith('answer_')]
@@ -42,10 +42,10 @@ def reorder_answers(request, id):
     return HttpResponse("ok")
 
 
-def reorder_questions(request, id):
+def reorder_questions(request, pk):
     if request.method != "POST":
         return HttpResponse("only use POST for this", status=400)
-    quiz = get_object_or_404(Quiz, id=id)
+    quiz = get_object_or_404(Quiz, pk=pk)
     keys = request.GET.keys()
     question_keys = [int(k[len('question_'):]) for k in keys
                      if k.startswith('question_')]
@@ -55,8 +55,8 @@ def reorder_questions(request, id):
     return HttpResponse("ok")
 
 
-def add_question_to_quiz(request, id):
-    quiz = get_object_or_404(Quiz, id=id)
+def add_question_to_quiz(request, pk):
+    quiz = get_object_or_404(Quiz, pk=pk)
     form = quiz.add_question_form(request.POST)
     if form.is_valid():
         question = form.save(commit=False)
@@ -65,8 +65,8 @@ def add_question_to_quiz(request, id):
     return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
 
 
-def edit_question(request, id):
-    question = get_object_or_404(Question, id=id)
+def edit_question(request, pk):
+    question = get_object_or_404(Question, pk=pk)
     if request.method == "POST":
         form = question.edit_form(request.POST)
         question = form.save(commit=False)
@@ -79,8 +79,8 @@ def edit_question(request, id):
         dict(question=question, answer_form=question.add_answer_form()))
 
 
-def add_answer_to_question(request, id):
-    question = get_object_or_404(Question, id=id)
+def add_answer_to_question(request, pk):
+    question = get_object_or_404(Question, pk=pk)
     if request.method == "POST":
         form = question.add_answer_form(request.POST)
         if form.is_valid():
@@ -90,7 +90,7 @@ def add_answer_to_question(request, id):
                 answer.label = answer.value
             answer.save()
             return HttpResponseRedirect(reverse("edit-question",
-                                        args=[question.id]))
+                                                args=[question.id]))
     else:
         form = question.add_answer_form()
     return render(
@@ -99,8 +99,8 @@ def add_answer_to_question(request, id):
         dict(question=question, answer_form=form))
 
 
-def edit_answer(request, id):
-    answer = get_object_or_404(Answer, id=id)
+def edit_answer(request, pk):
+    answer = get_object_or_404(Answer, pk=pk)
     form = answer.edit_form(request.POST)
     if request.method == "POST":
         if form.is_valid():
