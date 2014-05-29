@@ -2,6 +2,7 @@ from models import Quiz, Question, Answer
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 
@@ -26,15 +27,15 @@ class DeleteAnswerView(DeleteView):
         return reverse("edit-question", args=[question.id])
 
 
-def reorder_answers(request, pk):
-    if request.method != "POST":
-        return HttpResponse("only use POST for this")
-    question = get_object_or_404(Question, pk=pk)
-    keys = [k for k in request.GET.keys() if k.startswith("answer_")]
-    keys.sort(key=lambda x: int(x.split("_")[1]))
-    answers = [int(request.GET[k]) for k in keys if k.startswith('answer_')]
-    question.update_answers_order(answers)
-    return HttpResponse("ok")
+class ReorderAnswersView(View):
+    def post(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
+        keys = [k for k in request.GET.keys() if k.startswith("answer_")]
+        keys.sort(key=lambda x: int(x.split("_")[1]))
+        answers = [int(request.GET[k])
+                   for k in keys if k.startswith('answer_')]
+        question.update_answers_order(answers)
+        return HttpResponse("ok")
 
 
 def reorder_questions(request, pk):
