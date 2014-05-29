@@ -1,4 +1,4 @@
-recursive-include quizblock/ *
+recursive-include quizblock *
 
 
 
