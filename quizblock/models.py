@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
+from pagetree.reports import ReportableInterface, ReportColumnInterface
 
 
 class Quiz(models.Model):
@@ -143,6 +145,37 @@ class Quiz(models.Model):
             return self.description
         else:
             return self.description[:61] + "..."
+
+    def report_metadata(self):
+        columns = []
+        hierarchy = self.pageblock().section.hierarchy
+        for q in self.question_set.all():
+            if q.answerable():
+                # one row for each question/answer for choice questions
+                for a in q.answer_set.all():
+                    columns.append(QuestionColumn(hierarchy=hierarchy,
+                                                  question=q, answer=a))
+            else:
+                columns.append(QuestionColumn(hierarchy=hierarchy, question=q))
+
+        return columns
+
+    def report_values(self):
+        columns = []
+        hierarchy = self.pageblock().section.hierarchy
+        for q in self.question_set.all():
+            if q.is_multiple_choice():
+                # need to make a column for each answer
+                for a in q.answer_set.all():
+                    columns.append(QuestionColumn(
+                        hierarchy=hierarchy, question=q, answer=a))
+            else:
+                # single choice, short text and long text need only one row
+                columns.append(QuestionColumn(hierarchy=hierarchy, question=q))
+
+        return columns
+
+ReportableInterface.register(Quiz)
 
 
 class Question(models.Model):
@@ -304,3 +337,80 @@ class AnswerForm(forms.ModelForm):
                 'Please enter a meaningful value for this answer.')
         else:
             return self.cleaned_data
+
+
+class QuestionColumn(ReportColumnInterface):
+
+    def __init__(self, hierarchy, question, answer=None):
+        self.hierarchy = hierarchy
+        self.question = question
+        self.answer = answer
+
+        self._submission_cache = Submission.objects.filter(
+            quiz=self.question.quiz)
+        self._response_cache = Response.objects.filter(
+            question=self.question)
+        self._answer_cache = self.question.answer_set.all()
+
+    @classmethod
+    def clean_header(cls, s):
+        s = s.replace('<p>', '')
+        s = s.replace('</p>', '')
+        s = s.replace('</div>', '')
+        s = s.replace('\n', '')
+        s = s.replace('\r', '')
+        s = s.replace('<', '')
+        s = s.replace('>', '')
+        s = s.replace('\'', '')
+        s = s.replace('\"', '')
+        s = s.replace(',', '')
+        s = s.encode('utf-8')
+        return s
+
+    def question_id(self):
+        return "%s_%s" % (self.hierarchy.id, self.question.id)
+
+    def question_answer_id(self):
+        return "%s_%s_%s" % (self.hierarchy.id,
+                             self.question.id,
+                             self.answer.id)
+
+    def identifier(self):
+        if self.question and self.answer:
+            return self.question_answer_id()
+        else:
+            return self.question_id()
+
+    def metadata(self):
+        row = [self.question_id(),
+               self.hierarchy.name,
+               "Quiz",
+               self.question.question_type,
+               self.clean_header(self.question.text)]
+        if self.answer:
+            row.append(self.answer.id)
+            row.append(self.answer.label)
+        return row
+
+    def user_value(self, user):
+        value = ''
+        r = self._submission_cache.filter(user=user).order_by("-submitted")
+        if r.count() == 0:
+            # user has not answered this question
+            return None
+        submission = r[0]
+        r = self._response_cache.filter(submission=submission)
+        if r.count() > 0:
+            if (self.question.is_short_text() or
+                    self.question.is_long_text()):
+                value = r[0].value
+            elif self.question.is_multiple_choice():
+                if self.answer.value in [res.value for res in r]:
+                    value = self.answer.id
+            else:  # single choice
+                for a in self._answer_cache:
+                    if a.value == r[0].value:
+                        value = a.id
+                        break
+
+        return smart_str(value)

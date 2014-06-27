@@ -4,8 +4,6 @@ $ virtualenv ve
 $ ./ve/bin/pip install -r test_reqs.txt
 $ ./ve/bin/python runtests.py
 """
-
-
 from django.conf import settings
 from django.core.management import call_command
 
@@ -19,12 +17,12 @@ def main():
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'pagetree',
-            'quizblock',
             'django_nose',
-            'django_jenkins',
             'django_markwhat',
+            'django_jenkins',
+            'quizblock'
         ),
-        TEST_RUNNER = 'django_nose.NoseTestSuiteRunner',
+        TEST_RUNNER='django_nose.NoseTestSuiteRunner',
 
         NOSE_ARGS = [
             '--with-coverage',
@@ -38,7 +36,7 @@ def main():
         ],
         COVERAGE_EXCLUDES_FOLDERS = ['migrations'],
         ROOT_URLCONF = [],
-        PAGEBLOCKS = ['pagetree.TestBlock', ],
+        PAGEBLOCKS = ['pagetree.TestBlock', 'quizblock.Quiz'],
         SOUTH_TESTS_MIGRATE=False,
 
         # Django replaces this, but it still wants it. *shrugs*
