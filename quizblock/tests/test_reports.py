@@ -2,7 +2,7 @@ from pagetree.models import Hierarchy
 from pagetree.reports import PagetreeReport
 from quizblock.models import Quiz, Question, Answer, Submission, \
     QuestionColumn, Response
-from quizblock.tests.factories import PagetreeTestCase, UserFactory
+from pagetree.tests.factories import UserFactory, PagetreeTestCase
 
 
 class QuestionColumnTest(PagetreeTestCase):
@@ -133,7 +133,7 @@ class QuestionColumnTest(PagetreeTestCase):
     def test_report_metadata_columns(self):
         hierarchies = Hierarchy.objects.filter(name="one")
         columns = self.report.metadata_columns(hierarchies)
-        self.assertEquals(len(columns), 6)
+        self.assertEquals(len(columns), 7)
 
         self.assertEquals(columns[0].question, self.single_answer)
         self.assertEquals(columns[0].answer, self.single_answer_one)
@@ -154,7 +154,7 @@ class QuestionColumnTest(PagetreeTestCase):
     def test_report_value_columns(self):
         hierarchies = Hierarchy.objects.filter(name="one")
         columns = self.report.value_columns(hierarchies)
-        self.assertEquals(len(columns), 5)
+        self.assertEquals(len(columns), 6)
 
         self.assertEquals(columns[0].question, self.single_answer)
         self.assertIsNone(columns[0].answer)
