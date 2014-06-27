@@ -151,7 +151,7 @@ class Quiz(models.Model):
         hierarchy = self.pageblock().section.hierarchy
         for q in self.question_set.all():
             if q.answerable():
-                # one row for each answer
+                # one row for each question/answer for choice questions
                 for a in q.answer_set.all():
                     columns.append(QuestionColumn(hierarchy=hierarchy,
                                                   question=q, answer=a))
@@ -396,7 +396,7 @@ class QuestionColumn(ReportColumnInterface):
         value = ''
         r = self._submission_cache.filter(user=user).order_by("-submitted")
         if r.count() == 0:
-            # user has not submitted this form
+            # user has not answered this question
             return None
         submission = r[0]
         r = self._response_cache.filter(submission=submission)
