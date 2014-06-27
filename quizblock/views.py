@@ -1,110 +1,104 @@
 from models import Quiz, Question, Answer
-from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.generic.base import View
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import DeleteView
 
 
-class rendered_with(object):
-    def __init__(self, template_name):
-        self.template_name = template_name
-
-    def __call__(self, func):
-        def rendered_func(request, *args, **kwargs):
-            items = func(request, *args, **kwargs)
-            if isinstance(items, dict):
-                return render_to_response(
-                    self.template_name,
-                    items,
-                    context_instance=RequestContext(request))
-            else:
-                return items
-
-        return rendered_func
+class EditQuizView(DetailView):
+    model = Quiz
 
 
-@rendered_with('quizblock/edit_quiz.html')
-def edit_quiz(request, id):
-    quiz = get_object_or_404(Quiz, id=id)
-    section = quiz.pageblock().section
-    return dict(quiz=quiz, section=section)
+class DeleteQuestionView(DeleteView):
+    model = Question
+
+    def get_success_url(self):
+        quiz = self.object.quiz
+        return reverse("edit-quiz", args=[quiz.id])
 
 
-def delete_question(request, id):
-    question = get_object_or_404(Question, id=id)
-    if request.method == "POST":
-        quiz = question.quiz
-        question.delete()
+class DeleteAnswerView(DeleteView):
+    model = Answer
+
+    def get_success_url(self):
+        question = self.object.question
+        return reverse("edit-question", args=[question.id])
+
+
+class ReorderItemsView(View):
+    def post(self, request, pk):
+        parent = get_object_or_404(self.parent_model, pk=pk)
+        keys = [int(k[len(self.prefix):])
+                for k in request.GET.keys()
+                if k.startswith(self.prefix)]
+        keys.sort()
+        items = [int(request.GET[k])
+                 for k in keys if k.startswith(self.prefix)]
+        self.update_order(parent, items)
+        return HttpResponse("ok")
+
+
+class ReorderAnswersView(ReorderItemsView):
+    parent_model = Question
+    prefix = "answer_"
+
+    def update_order(self, parent, items):
+        parent.update_answers_order(items)
+
+
+class ReorderQuestionsView(ReorderItemsView):
+    parent_model = Quiz
+    prefix = "question_"
+
+    def update_order(self, parent, items):
+        parent.update_questions_order(items)
+
+
+class AddQuestionToQuizView(View):
+    def post(self, request, pk):
+        quiz = get_object_or_404(Quiz, pk=pk)
+        form = quiz.add_question_form(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.quiz = quiz
+            question.save()
         return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
-    return HttpResponse("""
-<html><body><form action="." method="post">Are you Sure?
-<input type="submit" value="Yes, delete it" /></form></body></html>
-""")
 
 
-def delete_answer(request, id):
-    answer = get_object_or_404(Answer, id=id)
-    if request.method == "POST":
-        question = answer.question
-        answer.delete()
-        return HttpResponseRedirect(reverse("edit-question",
-                                            args=[question.id]))
-    return HttpResponse("""
-<html><body><form action="." method="post">Are you Sure?
-<input type="submit" value="Yes, delete it" /></form></body></html>
-""")
+class EditQuestionView(View):
+    template_name = "quizblock/edit_question.html"
 
+    def get(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
+        return render(
+            request,
+            self.template_name,
+            dict(question=question, answer_form=question.add_answer_form()))
 
-def reorder_answers(request, id):
-    if request.method != "POST":
-        return HttpResponse("only use POST for this")
-    question = get_object_or_404(Question, id=id)
-    keys = [k for k in request.GET.keys() if k.startswith("answer_")]
-    keys.sort(key=lambda x: int(x.split("_")[1]))
-    answers = [int(request.GET[k]) for k in keys if k.startswith('answer_')]
-    question.update_answers_order(answers)
-    return HttpResponse("ok")
-
-
-def reorder_questions(request, id):
-    if request.method != "POST":
-        return HttpResponse("only use POST for this", status=400)
-    quiz = get_object_or_404(Quiz, id=id)
-    keys = request.GET.keys()
-    question_keys = [int(k[len('question_'):]) for k in keys
-                     if k.startswith('question_')]
-    question_keys.sort()
-    questions = [int(request.GET['question_' + str(k)]) for k in question_keys]
-    quiz.update_questions_order(questions)
-    return HttpResponse("ok")
-
-
-def add_question_to_quiz(request, id):
-    quiz = get_object_or_404(Quiz, id=id)
-    form = quiz.add_question_form(request.POST)
-    if form.is_valid():
-        question = form.save(commit=False)
-        question.quiz = quiz
-        question.save()
-    return HttpResponseRedirect(reverse("edit-quiz", args=[quiz.id]))
-
-
-@rendered_with('quizblock/edit_question.html')
-def edit_question(request, id):
-    question = get_object_or_404(Question, id=id)
-    if request.method == "POST":
+    def post(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
         form = question.edit_form(request.POST)
         question = form.save(commit=False)
         question.save()
         return HttpResponseRedirect(reverse("edit-question",
                                             args=[question.id]))
-    return dict(question=question, answer_form=question.add_answer_form())
 
 
-@rendered_with('quizblock/edit_question.html')
-def add_answer_to_question(request, id):
-    question = get_object_or_404(Question, id=id)
-    if request.method == "POST":
+class AddAnswerToQuestionView(View):
+    template_name = 'quizblock/edit_question.html'
+
+    def get(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
+        form = question.add_answer_form()
+        return render(
+            request,
+            self.template_name,
+            dict(question=question, answer_form=form))
+
+    def post(self, request, pk):
+        question = get_object_or_404(Question, pk=pk)
         form = question.add_answer_form(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
@@ -113,22 +107,33 @@ def add_answer_to_question(request, id):
                 answer.label = answer.value
             answer.save()
             return HttpResponseRedirect(reverse("edit-question",
-                                        args=[question.id]))
-    else:
-        form = question.add_answer_form()
-    return dict(question=question, answer_form=form)
+                                                args=[question.id]))
+        return render(
+            request,
+            self.template_name,
+            dict(question=question, answer_form=form))
 
 
-@rendered_with('quizblock/edit_answer.html')
-def edit_answer(request, id):
-    answer = get_object_or_404(Answer, id=id)
-    form = answer.edit_form(request.POST)
-    if request.method == "POST":
+class EditAnswerView(View):
+    template_name = 'quizblock/edit_answer.html'
+
+    def get(self, request, pk):
+        answer = get_object_or_404(Answer, pk=pk)
+        form = answer.edit_form()
+        return render(
+            request,
+            self.template_name,
+            dict(answer_form=form, answer=answer))
+
+    def post(self, request, pk):
+        answer = get_object_or_404(Answer, pk=pk)
+        form = answer.edit_form(request.POST)
         if form.is_valid():
             answer = form.save(commit=False)
             answer.save()
             return HttpResponseRedirect(reverse("edit-answer",
                                                 args=[answer.id]))
-    else:
-        form = answer.edit_form()
-    return dict(answer_form=form, answer=answer)
+        return render(
+            request,
+            self.template_name,
+            dict(answer_form=form, answer=answer))

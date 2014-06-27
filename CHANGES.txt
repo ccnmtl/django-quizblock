@@ -1,0 +1,5 @@
+0.7.0 (2014-05-29)
+==================
+
+* converted to Class-based Views for easier overriding
+* testing against Django 1.6.5
