@@ -7,3 +7,7 @@ ve
 .coverage
 reports/
 build
+django_quizblock.egg-info/
+env
+.project
+.pydevproject
