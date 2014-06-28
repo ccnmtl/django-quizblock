@@ -61,7 +61,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = [identifier, 'one', 'Quiz', 'single choice', 'single answer']
+        key_row = ['one', identifier, 'Quiz', 'single choice', 'single answer']
         self.assertEquals(column.metadata(), key_row)
 
         # user value
@@ -85,7 +85,7 @@ class QuestionColumnTest(PagetreeTestCase):
 
         # key row
         identifier = '%s_%s' % (self.hierarchy_one.id, self.multiple_answer.id)
-        key_row = [identifier, 'one', 'Quiz', 'multiple choice',
+        key_row = ['one', identifier, 'Quiz', 'multiple choice',
                    'multiple answer', a.id, a.label]
         self.assertEquals(column.metadata(), key_row)
 
@@ -104,7 +104,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = [identifier, 'one', 'Quiz', 'short text', 'short text']
+        key_row = ['one', identifier, 'Quiz', 'short text', 'short text']
         self.assertEquals(column.metadata(), key_row)
 
         # user value
@@ -123,7 +123,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = [identifier, 'one', 'Quiz', 'long text', 'long text']
+        key_row = ['one', identifier, 'Quiz', 'long text', 'long text']
         self.assertEquals(column.metadata(), key_row)
 
         # user value

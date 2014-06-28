@@ -1,6 +1,13 @@
 0.8.0 (2014-06-28)
 ==================
 
+* Reportable Interface - metadata columns rendered in incorrect order
+* CBV conversion - urls.py incorrectly referenced view classes
+* edit_answer.html, edit_question.html, quiz_detail.html - correcting breadcrumb links.
+
+0.8.0 (2014-06-28)
+==================
+
 * Reportable Interface
 
 0.7.0 (2014-05-29)

@@ -382,8 +382,8 @@ class QuestionColumn(ReportColumnInterface):
             return self.question_id()
 
     def metadata(self):
-        row = [self.question_id(),
-               self.hierarchy.name,
+        row = [self.hierarchy.name,
+               self.question_id(),
                "Quiz",
                self.question.question_type,
                self.clean_header(self.question.text)]
