@@ -6,6 +6,8 @@ from quizblock.views import EditQuizView, AddQuestionToQuizView
 
 
 class LoggedInViewTest(TestCase):
+    urls = 'quizblock.urls'
+
     def setUp(self):
         self.factory = RequestFactory()
         self.user = UserFactory()
@@ -41,7 +43,7 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = AddQuestionToQuizView.as_view()(request, pk=self.quiz.id)
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 302)
         self.assertEquals(self.quiz.question_set.count(), 2)
 
 #     def test_edit_question(self):
