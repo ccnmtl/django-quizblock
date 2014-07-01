@@ -282,6 +282,9 @@ class Answer(models.Model):
     def __unicode__(self):
         return self.label
 
+    def display_number(self):
+        return self._order + 1
+
     def edit_form(self, request=None):
         return AnswerForm(request, instance=self)
 

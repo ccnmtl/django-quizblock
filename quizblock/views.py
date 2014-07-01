@@ -30,10 +30,10 @@ class DeleteAnswerView(DeleteView):
 class ReorderItemsView(View):
     def post(self, request, pk):
         parent = get_object_or_404(self.parent_model, pk=pk)
-        keys = [int(k[len(self.prefix):])
+        keys = [k
                 for k in request.GET.keys()
                 if k.startswith(self.prefix)]
-        keys.sort()
+        keys.sort(key=lambda x: int(x.split("_")[1]))
         items = [int(request.GET[k])
                  for k in keys if k.startswith(self.prefix)]
         self.update_order(parent, items)
