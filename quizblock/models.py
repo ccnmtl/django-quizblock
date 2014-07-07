@@ -80,7 +80,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
             allow_redo = forms.BooleanField()
-            show_submit_state = forms.BooleanField()
+            show_submit_state = forms.BooleanField(initial=True)
         return AddForm()
 
     @classmethod
@@ -106,7 +106,7 @@ class Quiz(models.Model):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
         self.allow_redo = vals.get('allow_redo', '')
-        self.show_submit_state = vals.get('show_submit_state', True)
+        self.show_submit_state = vals.get('show_submit_state', False) 
         self.save()
 
     def add_question_form(self, request=None):

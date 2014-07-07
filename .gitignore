@@ -11,3 +11,4 @@ django_quizblock.egg-info/
 env
 .project
 .pydevproject
+.settings
