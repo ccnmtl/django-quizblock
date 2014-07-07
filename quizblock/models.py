@@ -106,7 +106,7 @@ class Quiz(models.Model):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
         self.allow_redo = vals.get('allow_redo', '')
-        self.show_submit_state = vals.get('show_submit_state', False) 
+        self.show_submit_state = vals.get('show_submit_state', False)
         self.save()
 
     def add_question_form(self, request=None):
