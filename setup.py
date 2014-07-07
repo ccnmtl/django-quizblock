@@ -27,13 +27,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="0.9.0",
+    version="0.9.1",
     author="Anders Pearson",
     author_email="anders@columbia.edu",
     url="",
     description="Basic Quiz PageBlock",
     long_description="Basic Quiz PageBlocks (see django-pagetree and django-pageblocks)",
-    install_requires = [],
+    install_requires = ['pagetree >= 0.14.5'],
     scripts = [],
     license = "BSD",
     platforms = ["any"],
