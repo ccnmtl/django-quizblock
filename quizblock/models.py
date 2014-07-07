@@ -89,7 +89,7 @@ class Quiz(models.Model):
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
             allow_redo=request.POST.get('allow_redo', ''),
-            show_submit_state=request.POST.get('show_submit_state', True))
+            show_submit_state=request.POST.get('show_submit_state', False))
 
     @classmethod
     def create_from_dict(self, d):

@@ -31,7 +31,21 @@ class TestBasics(TestCase):
         q = Quiz.create(r)
         self.assertEquals(q.description, '')
         self.assertEquals(q.display_name, 'Quiz')
+        self.assertFalse(q.show_submit_state)
+        self.assertFalse(q.rhetorical)
+        self.assertFalse(q.allow_redo)
+
+    def test_create_method_two(self):
+        r = FakeReq()
+        r.POST['show_submit_state'] = 'on'
+        r.POST['rhetorical'] = 'on'
+        r.POST['allow_redo'] = 'on'
+        q = Quiz.create(r)
+        self.assertEquals(q.description, '')
+        self.assertEquals(q.display_name, 'Quiz')
         self.assertTrue(q.show_submit_state)
+        self.assertTrue(q.rhetorical)
+        self.assertTrue(q.allow_redo)
 
     def test_dict_roundtrip(self):
         q1 = Quiz(description="first", show_submit_state=False)
@@ -63,10 +77,18 @@ class TestBasics(TestCase):
     def test_edit(self):
         q = Quiz()
         q.edit(dict(description='foo', rhetorical='1',
-                    allow_redo='0', show_submit_state=False), None)
+                    allow_redo='0', show_submit_state='on'), None)
         self.assertEqual(q.description, 'foo')
         self.assertEqual(q.rhetorical, '1')
         self.assertEqual(q.allow_redo, '0')
+        self.assertTrue(q.show_submit_state)
+
+    def test_edit_two(self):
+        q = Quiz()
+        q.edit(dict(description='foo'), None)
+        self.assertEqual(q.description, 'foo')
+        self.assertFalse(q.rhetorical)
+        self.assertFalse(q.allow_redo)
         self.assertFalse(q.show_submit_state)
 
     def test_edit_form(self):
