@@ -14,6 +14,7 @@ class Quiz(models.Model):
     description = models.TextField(blank=True)
     rhetorical = models.BooleanField(default=False)
     allow_redo = models.BooleanField(default=True)
+    show_submit_state = models.BooleanField(default=True)
     template_file = "quizblock/quizblock.html"
 
     display_name = "Quiz"
@@ -54,7 +55,7 @@ class Quiz(models.Model):
                         value=data[k])
 
     def redirect_to_self_on_submit(self):
-        return True
+        return self.show_submit_state
 
     def unlocked(self, user):
         # meaning that the user can proceed *past* this one,
@@ -67,6 +68,8 @@ class Quiz(models.Model):
                                           initial=self.description)
             rhetorical = forms.BooleanField(initial=self.rhetorical)
             allow_redo = forms.BooleanField(initial=self.allow_redo)
+            show_submit_state = forms.BooleanField(
+                initial=self.show_submit_state)
             alt_text = ("<a href=\"" + reverse("edit-quiz", args=[self.id])
                         + "\">manage questions/answers</a>")
         return EditForm()
@@ -77,6 +80,7 @@ class Quiz(models.Model):
             description = forms.CharField(widget=forms.widgets.Textarea())
             rhetorical = forms.BooleanField()
             allow_redo = forms.BooleanField()
+            show_submit_state = forms.BooleanField(initial=True)
         return AddForm()
 
     @classmethod
@@ -84,7 +88,8 @@ class Quiz(models.Model):
         return Quiz.objects.create(
             description=request.POST.get('description', ''),
             rhetorical=request.POST.get('rhetorical', ''),
-            allow_redo=request.POST.get('allow_redo', ''))
+            allow_redo=request.POST.get('allow_redo', ''),
+            show_submit_state=request.POST.get('show_submit_state', False))
 
     @classmethod
     def create_from_dict(self, d):
@@ -92,6 +97,7 @@ class Quiz(models.Model):
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
             allow_redo=d.get('allow_redo', True),
+            show_submit_state=d.get('show_submit_state', True)
         )
         q.import_from_dict(d)
         return q
@@ -100,6 +106,7 @@ class Quiz(models.Model):
         self.description = vals.get('description', '')
         self.rhetorical = vals.get('rhetorical', '')
         self.allow_redo = vals.get('allow_redo', '')
+        self.show_submit_state = vals.get('show_submit_state', False)
         self.save()
 
     def add_question_form(self, request=None):
@@ -114,7 +121,8 @@ class Quiz(models.Model):
     def as_dict(self):
         d = dict(description=self.description,
                  rhetorical=self.rhetorical,
-                 allow_redo=self.allow_redo)
+                 allow_redo=self.allow_redo,
+                 show_submit_state=self.show_submit_state)
         d['questions'] = [q.as_dict() for q in self.question_set.all()]
         return d
 
@@ -122,6 +130,7 @@ class Quiz(models.Model):
         self.description = d['description']
         self.rhetorical = d['rhetorical']
         self.allow_redo = d.get('allow_redo', True)
+        self.show_submit_state = d.get('show_submit_state', True)
         self.save()
         self.submission_set.all().delete()
         self.question_set.all().delete()

@@ -56,7 +56,7 @@
 {% block content %}
 
 <ul class="breadcrumb">
-	<li><a href="/edit{{quiz.pageblock.section.get_absolute_url}}">{{quiz.pageblock.section.label}}</a>
+	<li><a href="{{quiz.pageblock.section.get_edit_url}}">{{quiz.pageblock.section.label}}</a>
 		<span class="divider">/</span>
 	</li>
 	<li>Edit Quiz</li>
