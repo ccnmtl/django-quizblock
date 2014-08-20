@@ -1,8 +1,16 @@
 {% load markup %}
 
-<select name="pageblock-{{block.pageblock.id}}-question{{question.id}}" class="form-control">
+<select name="pageblock-{{block.pageblock.id}}-question{{question.id}}" class="form-control"{% if response %} disabled{% endif %}>
   {% for answer in question.answer_set.all %}
-      <option value="{{answer.value}}">{{answer.label}}</option>
+        {% if response %}
+          {% ifequal response.value answer.value %}
+             <option value="{{answer.value}}" selected>{{answer.label}}</option>
+          {% else %}
+            <option value="{{answer.value}}">{{answer.label}}</option>
+          {% endifequal %}
+        {% else %}
+           <option value="{{answer.value}}">{{answer.label}}</option>
+        {% endif %}
   {% endfor %}
 </select>
 
