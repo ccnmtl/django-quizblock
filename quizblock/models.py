@@ -401,7 +401,7 @@ class QuestionColumn(ReportColumnInterface):
                self.clean_header(self.question.text)]
         if self.answer:
             row.append(self.answer.id)
-            row.append(self.answer.label)
+            row.append(self.clean_header(self.answer.label))
         return row
 
     def user_value(self, user):
