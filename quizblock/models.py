@@ -184,6 +184,25 @@ class Quiz(models.Model):
 
         return columns
 
+    def score(self, user):
+        '''
+            returns
+            - None if incomplete or has no questions
+            - float score if complete
+        '''
+        if self.question_set.count() == 0:
+            return None
+
+        score = 0.0
+        for question in self.question_set.all():
+            correct = question.is_user_correct(user)
+            if correct is None:
+                return None
+            elif correct:
+                score += 1
+
+        return score / self.question_set.count()
+
 ReportableInterface.register(Quiz)
 
 
@@ -275,6 +294,31 @@ class Question(models.Model):
             intro_text=self.intro_text,
             answers=[a.as_dict() for a in self.answer_set.all()]
         )
+
+    def is_user_correct(self, user):
+        '''
+            * None if user has not responded
+            * False if user has not answered or not answered correctly
+            * True if user has responded and
+                there is no correct answer or has answered correctly
+        '''
+        responses = self.user_responses(user)
+        answers = self.correct_answer_values()
+
+        if len(responses) == 0:
+            return None  # incomplete
+
+        if not self.answerable() or len(answers) == 0:
+            return True  # a completed response is considered correct
+
+        if len(answers) != len(responses):
+            # The user hasn't completely answered the question yet
+            return False
+
+        correct = True
+        for resp in responses:
+            correct = correct and str(resp.value) in answers
+        return correct
 
 
 class Answer(models.Model):

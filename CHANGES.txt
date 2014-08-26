@@ -1,3 +1,16 @@
+0.9.4
+==================
+Adding some rudimentary scoring into the Quiz / Question models
+* A Quiz score is 0 if incomplete, else is the score / question count
+* A Question is "correct" if complete and 
+    (not answerable or
+     has no correct answers or
+     the user has selected the correct answers)
+
+0.9.3 
+==================
+fixing setup.py dependency reference to pagetree
+
 0.9.2 (2014-08-20)
 ==================
 

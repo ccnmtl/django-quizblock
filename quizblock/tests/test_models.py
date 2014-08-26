@@ -237,6 +237,129 @@ class QuestionTest(TestCase):
         self.assertEquals(len(q1.user_responses(user)), 1)
 
 
+class TestIsUserCorrect(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create(username="testuser")
+        self.quiz = Quiz.objects.create()
+
+    def test_no_questions(self):
+        self.assertEquals(self.quiz.score(self.user), None)
+
+    def test_short_text(self):
+        question = Question.objects.create(quiz=self.quiz,
+                                           text="question_one",
+                                           question_type="short text")
+
+        # no submissions
+        self.assertIsNone(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), None)
+
+        sub = Submission.objects.create(quiz=self.quiz, user=self.user)
+        Response.objects.create(question=question, submission=sub, value="a")
+
+        self.assertTrue(question.is_user_correct(self.user))
+
+        #score
+        self.assertEquals(self.quiz.score(self.user), 1)
+
+    def test_long_text(self):
+        question = Question.objects.create(quiz=self.quiz,
+                                           text="question_one",
+                                           question_type="long text")
+
+        # no submissions
+        self.assertIsNone(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), None)
+
+        sub = Submission.objects.create(quiz=self.quiz, user=self.user)
+        Response.objects.create(question=question, submission=sub, value="b")
+
+        self.assertTrue(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 1)
+
+    def test_single_choice_no_correct_answers(self):
+        question = Question.objects.create(quiz=self.quiz,
+                                           text="question_one",
+                                           question_type="single choice")
+        Answer.objects.create(question=question, label="a", value="a")
+        Answer.objects.create(question=question, label="b", value="b")
+        Answer.objects.create(question=question, label="c", value="c")
+
+        # no response
+        self.assertIsNone(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), None)
+
+        # user responded
+        sub = Submission.objects.create(quiz=self.quiz, user=self.user)
+        Response.objects.create(question=question, submission=sub, value="b")
+
+        self.assertTrue(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 1)
+
+    def test_single_choice_correct_answers(self):
+        question = Question.objects.create(quiz=self.quiz,
+                                           text="question_one",
+                                           question_type="single choice")
+        Answer.objects.create(question=question, label="a", value="a",
+                              correct=True)
+        Answer.objects.create(question=question, label="b", value="b")
+        Answer.objects.create(question=question, label="c", value="c")
+
+        # no response
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), None)
+
+        # user responded
+        sub = Submission.objects.create(quiz=self.quiz, user=self.user)
+        response = Response.objects.create(question=question,
+                                           submission=sub, value="a")
+
+        self.assertTrue(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 1)
+
+        response.value = 'b'
+        response.save()
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 0)
+
+    def test_multiple_choice_correct_answers(self):
+        question = Question.objects.create(quiz=self.quiz,
+                                           text="question_one",
+                                           question_type="multiple choice")
+        Answer.objects.create(question=question, label="a", value="a",
+                              correct=True)
+        Answer.objects.create(question=question, label="b", value="b",
+                              correct=True)
+        Answer.objects.create(question=question, label="c", value="c")
+
+        # no response
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), None)
+
+        # user responded - incorrectly
+        sub = Submission.objects.create(quiz=self.quiz, user=self.user)
+        c = Response.objects.create(question=question,
+                                    submission=sub, value="c")
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 0)
+
+        # user responded - partially incorrectly
+        Response.objects.create(question=question, submission=sub, value="a")
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 0)
+
+        # user responded - partially incorrectly
+        Response.objects.create(question=question, submission=sub, value="b")
+        self.assertFalse(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 0)
+
+        # kill the incorrect one
+        c.delete()
+        self.assertTrue(question.is_user_correct(self.user))
+        self.assertEquals(self.quiz.score(self.user), 1)
+
+
 class AnswerTest(TestCase):
     def test_unicode(self):
         quiz = Quiz.objects.create()
