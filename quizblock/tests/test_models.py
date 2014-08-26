@@ -243,6 +243,9 @@ class TestIsUserCorrect(TestCase):
         self.user = User.objects.create(username="testuser")
         self.quiz = Quiz.objects.create()
 
+    def test_no_questions(self):
+        self.assertEquals(self.quiz.score(self.user), None)
+
     def test_short_text(self):
         question = Question.objects.create(quiz=self.quiz,
                                            text="question_one",

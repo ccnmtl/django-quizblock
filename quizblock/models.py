@@ -187,9 +187,12 @@ class Quiz(models.Model):
     def score(self, user):
         '''
             returns
-            - None if incomplete
+            - None if incomplete or has no questions
             - float score if complete
         '''
+        if self.question_set.count() == 0:
+            return None
+
         score = 0.0
         for question in self.question_set.all():
             correct = question.is_user_correct(user)
