@@ -1,3 +1,10 @@
+1.0.0
+==================
+
+* Django 1.7 conversion. Dual South/Django migrations enabled. This
+  does mean that if you are still using South, you will now need
+  to be on South 1.0.
+
 0.9.4
 ==================
 Adding some rudimentary scoring into the Quiz / Question models

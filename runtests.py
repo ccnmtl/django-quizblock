@@ -6,6 +6,7 @@ $ ./ve/bin/python runtests.py
 """
 from django.conf import settings
 from django.core.management import call_command
+import django
 
 
 def main():
@@ -23,9 +24,8 @@ def main():
             'quizblock'
         ),
         TEST_RUNNER='django_nose.NoseTestSuiteRunner',
-
+        MIDDLEWARE_CLASSES=[],
         NOSE_ARGS = [
-            '--with-coverage',
             '--cover-package=quizblock',
         ],
         JENKINS_TASKS = (
@@ -34,7 +34,7 @@ def main():
         PROJECT_APPS = [
             'quizblock',
         ],
-        COVERAGE_EXCLUDES_FOLDERS = ['migrations'],
+        COVERAGE_EXCLUDES_FOLDERS = ['migrations', 'south_migrations'],
         ROOT_URLCONF = [],
         PAGEBLOCKS = ['pagetree.TestBlock', 'quizblock.Quiz'],
         SOUTH_TESTS_MIGRATE=False,
@@ -51,7 +51,7 @@ def main():
                 }
             }
     )
-
+    django.setup()
     # Fire off the tests
     call_command('jenkins')
 
