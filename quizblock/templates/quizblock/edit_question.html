@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load static from staticfiles %}
 
 {% block css %}
 <link rel="stylesheet"
@@ -7,10 +8,12 @@
 
     <style type="text/css">
         .draghandle {float: left;}
-        #answers {list-style-type: none; margin: 0; padding: 0;}
-        #answers li { margin: 0 3px 3px 3px; padding: 0.4em;
-        padding-left: 1.5em; 
-              background-color: #ddd;
+        #answers { padding: 0; }
+        #answers li {
+            margin: 0 3px 3px 3px;
+            padding: 0.4em;
+            padding-left: 1.5em;
+            background-color: #ddd;
         }
         #answers li span { position: absolute; margin-left: -1.3em; }
         .dragging {border: #f60 solid 1px;}
@@ -20,32 +23,20 @@
 
 {% block js %}
     {% include "quizblock/include_jquery.html" %}
-
+    <script src="{% static 'quizblock/js/quizblock-admin.js' %}"></script>
     <script>
         (function($) {
-        var saveOrder = function() {
-            var url = "{% url 'reorder-answer' question.id %}?";
-            var worktodo = 0;
-            $("#answers li").each(function(index,element) {
-               worktodo = 1;
-               var id = $(element).attr('id').split("-")[1];
-               url += "answer_" + index + "=" + id + ";";
-            });
-            if (worktodo == 1) {
-                var req = new XMLHttpRequest();
-                req.open("POST",url,true);
-                req.send(null);
-            }
-        };
-        
-        $(document).ready(function () {
+        var url = "{% url 'reorder-answer' question.id %}";
+        $(document).ready(function() {
             $("#answers").sortable({
-                containment : 'parent'
-                ,axis : 'y'
-                ,tolerance: 'pointer'
-                ,activeClass: 'dragging'
-                ,handle: '.draghandle'
-                ,stop: function (event,ui) { saveOrder();}
+                containment : 'parent',
+                axis : 'y',
+                tolerance: 'pointer',
+                activeClass: 'dragging',
+                handle: '.draghandle',
+                stop: function(event, ui) {
+                    quizblock.saveOrder($('#answers li'), url, 'answer_');
+                }
             });
             $("#answers").disableSelection();
         });

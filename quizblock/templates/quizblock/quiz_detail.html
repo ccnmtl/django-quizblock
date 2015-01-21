@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load bootstrap %}
+{% load static from staticfiles %}
 
 {% block css %}
 <link rel="stylesheet"
@@ -7,10 +8,12 @@
 
     <style type="text/css">
         .draghandle {float: left;}
-        #questions {list-style-type: none; margin: 0; padding: 0;}
-        #questions li { margin: 0 3px 3px 3px; padding: 0.4em;
-        padding-left: 1.5em; 
-              background-color: #ddd;
+        #questions { padding: 0; }
+        #questions li {
+            margin: 0 3px 3px 3px;
+            padding: 0.4em;
+            padding-left: 1.5em;
+            background-color: #ddd;
         }
         #questions li span { position: absolute; margin-left: -1.3em; }
         .dragging {border: #f60 solid 1px;}
@@ -19,35 +22,23 @@
 
 {% block js %}
     {% include "quizblock/include_jquery.html" %}
-
+    <script src="{% static 'quizblock/js/quizblock-admin.js' %}"></script>
     <script>
         (function($) {
-        var saveOrder = function() {
-            var url = "{% url 'reorder-questions' quiz.id %}?";
-            var worktodo = 0;
-            $("#questions li").each(function(index,element) {
-               worktodo = 1;
-               var id = $(element).attr('id').split("-")[1];
-               url += "question_" + index + "=" + id + ";";
-            });
-            if (worktodo == 1) {
-                var req = new XMLHttpRequest();
-                req.open("POST",url,true);
-                req.send(null);
-            }
-        };
-        
+        var url = "{% url 'reorder-questions' quiz.id %}";
         $(document).ready(function() {
             $("#questions").sortable({
-              containment : 'parent'
-              ,axis : 'y'
-              ,tolerance: 'pointer'
-              ,activeClass: 'dragging'
-              ,handle: '.draghandle'
-              ,stop: function (event,ui) { saveOrder();}
+                containment : 'parent',
+                axis : 'y',
+                tolerance: 'pointer',
+                activeClass: 'dragging',
+                handle: '.draghandle',
+                stop: function(event, ui) {
+                    quizblock.saveOrder($('#questions li'), url, 'question_');
+                }
             });
             $("#questions").disableSelection();
-          });
+        });
         })(quizblock.$);
     </script>
 
