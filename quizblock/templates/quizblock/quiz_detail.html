@@ -75,6 +75,7 @@
 </ul>
 
 <form action="add_question/" method="post" class="well form-horizontal">
+    {% csrf_token %}
 <h2>Add Question</h2>
 <table width="100%">
 {{ quiz.add_question_form|bootstrap}}
