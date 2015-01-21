@@ -18,17 +18,16 @@
 {% endblock %}
 
 {% block js %}
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    {% include "quizblock/include_jquery.html" %}
 
     <script>
+        (function($) {
         var saveOrder = function() {
             var url = "{% url 'reorder-questions' quiz.id %}?";
             var worktodo = 0;
-            jQuery("#questions li").each(function(index,element) {
+            $("#questions li").each(function(index,element) {
                worktodo = 1;
-               var id = jQuery(element).attr('id').split("-")[1];
+               var id = $(element).attr('id').split("-")[1];
                url += "question_" + index + "=" + id + ";";
             });
             if (worktodo == 1) {
@@ -38,8 +37,8 @@
             }
         };
         
-        jQuery(document).ready(function() {
-            jQuery("#questions").sortable({
+        $(document).ready(function() {
+            $("#questions").sortable({
               containment : 'parent'
               ,axis : 'y'
               ,tolerance: 'pointer'
@@ -47,9 +46,9 @@
               ,handle: '.draghandle'
               ,stop: function (event,ui) { saveOrder();}
             });
-            jQuery("#questions").disableSelection();
+            $("#questions").disableSelection();
           });
-
+        })(quizblock.$);
     </script>
 
 {% endblock %}

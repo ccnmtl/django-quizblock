@@ -19,16 +19,16 @@
 {% endblock %}
 
 {% block js %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    {% include "quizblock/include_jquery.html" %}
 
     <script>
+        (function($) {
         var saveOrder = function() {
             var url = "{% url 'reorder-answer' question.id %}?";
             var worktodo = 0;
-            jQuery("#answers li").each(function(index,element) {
+            $("#answers li").each(function(index,element) {
                worktodo = 1;
-               var id = jQuery(element).attr('id').split("-")[1];
+               var id = $(element).attr('id').split("-")[1];
                url += "answer_" + index + "=" + id + ";";
             });
             if (worktodo == 1) {
@@ -38,8 +38,8 @@
             }
         };
         
-        jQuery(document).ready(function () {
-            jQuery("#answers").sortable({
+        $(document).ready(function () {
+            $("#answers").sortable({
                 containment : 'parent'
                 ,axis : 'y'
                 ,tolerance: 'pointer'
@@ -47,8 +47,9 @@
                 ,handle: '.draghandle'
                 ,stop: function (event,ui) { saveOrder();}
             });
-            jQuery("#answers").disableSelection();
+            $("#answers").disableSelection();
         });
+        })(quizblock.$);
     </script>
 
 
