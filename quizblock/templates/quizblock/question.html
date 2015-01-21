@@ -12,7 +12,9 @@
     <div class="casequestion">
       {{question.text|markdown}}
       {% if question.answerable %}
-        {% if block.rhetorical %}<form id="form-{{question.id}}" method="post">{% endif %}
+      {% if block.rhetorical %}
+      <form id="form-{{question.id}}" method="post">{% csrf_token %}
+      {% endif %}
 
 	{% if question.is_single_choice %}
   	  {% include 'quizblock/single_choice.html' %}
