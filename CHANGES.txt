@@ -1,3 +1,8 @@
+1.0.1
+==================
+
+*  Added CSRF token to ajax requests that occur when sorting quizblocks
+
 1.0.0
 ==================
 

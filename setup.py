@@ -27,10 +27,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="1.0.0",
+    version="1.0.1",
     author="Anders Pearson",
     author_email="anders@columbia.edu",
-    url="",
+    url="https://github.com/ccnmtl/django-quizblock",
     description="Basic Quiz PageBlock",
     long_description="Basic Quiz PageBlocks (see django-pagetree and django-pageblocks)",
     install_requires = ['django-pagetree >= 0.14.5'],
@@ -42,5 +42,4 @@ setup(
     packages=find_packages(),
     test_suite='nose.collector',
     include_package_data=True,
-
     )
