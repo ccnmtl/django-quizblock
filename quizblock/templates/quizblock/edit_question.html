@@ -7,7 +7,10 @@
       href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
 
     <style type="text/css">
-        .draghandle {float: left;}
+        .draghandle {
+            float: left;
+            cursor: move;
+        }
         #answers { padding: 0; }
         #answers li {
             margin: 0 3px 3px 3px;
@@ -15,8 +18,7 @@
             padding-left: 1.5em;
             background-color: #ddd;
         }
-        #answers li span { position: absolute; margin-left: -1.3em; }
-        .dragging {border: #f60 solid 1px;}
+        .dragging { border: #f60 solid 1px; }
     </style>
     
 {% endblock %}
