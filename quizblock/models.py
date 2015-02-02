@@ -1,4 +1,3 @@
-from datetime import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
@@ -351,7 +350,7 @@ class Answer(models.Model):
 class Submission(models.Model):
     quiz = models.ForeignKey(Quiz)
     user = models.ForeignKey(User)
-    submitted = models.DateTimeField(default=datetime.now)
+    submitted = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __unicode__(self):
         return "quiz %d submission by %s at %s" % (self.quiz.id,
