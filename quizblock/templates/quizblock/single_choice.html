@@ -1,22 +1,32 @@
 {% load markup %}
 
 <ol type="A">
-  {% for answer in question.answer_set.all %}
+    {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}
-      <li><input name="question{{question.id}}" value="{{answer.label}}" type="radio" /> {{answer.label}}</li>
-    {% else %}
-      <li>
-        {% if response %}
-          {% ifequal response.value answer.value %}
-            <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}">{{answer.label}}</span>
-          {% else %}
+    <li>
+        <label>
+            <input name="question{{question.id}}" value="{{answer.label}}"
+                   type="radio">
             {{answer.label}}
-          {% endifequal %}
+        </label>
+    </li>
+    {% else %}
+    <li>
+        {% if response %}
+        {% ifequal response.value answer.value %}
+        <span class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}"
+              >{{answer.label}}</span>
         {% else %}
-          <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
-	  value="{{answer.value}}" type="radio" /> {{answer.label}}
+        {{answer.label}}
+        {% endifequal %}
+        {% else %}
+        <label>
+            <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+                   value="{{answer.value}}" type="radio">
+            {{answer.label}}
+        </label>
         {% endif %}
-      </li>
+    </li>
     {% endif %}
-  {% endfor %}
+    {% endfor %}
 </ol>
