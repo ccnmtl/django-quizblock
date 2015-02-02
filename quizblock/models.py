@@ -208,7 +208,7 @@ ReportableInterface.register(Quiz)
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz)
-    text = models.TextField()
+    text = models.TextField(help_text='Required')
     question_type = models.CharField(
         max_length=256,
         choices=(
@@ -380,6 +380,11 @@ class QuestionForm(forms.ModelForm):
         model = Question
         exclude = ("quiz",)
         fields = ('question_type', 'intro_text', 'text', 'explanation')
+        widgets = {
+            'intro_text': forms.widgets.Textarea(attrs={'rows': 4}),
+            'text': forms.widgets.Textarea(attrs={'rows': 4}),
+            'explanation': forms.widgets.Textarea(attrs={'rows': 4}),
+        }
 
 
 class AnswerForm(forms.ModelForm):
