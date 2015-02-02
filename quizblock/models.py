@@ -386,6 +386,10 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         exclude = ("question",)
+        widgets = {
+            'label': forms.widgets.Textarea(attrs={'rows': 4}),
+            'explanation': forms.widgets.Textarea(attrs={'rows': 4}),
+        }
 
     def clean(self):
         if 'value' not in self.cleaned_data:
