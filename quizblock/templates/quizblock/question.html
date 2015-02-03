@@ -7,7 +7,7 @@
   {{question.intro_text|markdown}}
 
   <div class="casetitle"> Question {{question.display_number}}:</div>
-     
+
   <div class="casecontent">
     <div class="casequestion">
       {{question.text|markdown}}
@@ -16,17 +16,17 @@
       <form id="form-{{question.id}}" method="post">{% csrf_token %}
       {% endif %}
 
-	{% if question.is_single_choice %}
-  	  {% include 'quizblock/single_choice.html' %}
-	{% endif %}
+    {% if question.is_single_choice %}
+      {% include 'quizblock/single_choice.html' %}
+    {% endif %}
 
-	{% if question.is_single_choice_dropdown %}
-  	  {% include 'quizblock/single_choice_dropdown.html' %}
-	{% endif %}
+    {% if question.is_single_choice_dropdown %}
+      {% include 'quizblock/single_choice_dropdown.html' %}
+    {% endif %}
 
-	{% if question.is_multiple_choice %}
-	  {% include 'quizblock/multiple_choice.html' %}
-	{% endif %}
+    {% if question.is_multiple_choice %}
+      {% include 'quizblock/multiple_choice.html' %}
+    {% endif %}
 
         {% if block.rhetorical %}
           </form>

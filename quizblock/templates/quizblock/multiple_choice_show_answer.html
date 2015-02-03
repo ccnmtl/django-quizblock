@@ -1,25 +1,25 @@
 {% load markup %}
 {% if block.rhetorical %}
-      <div class="casesanswerdisplay">
-        <a href="#q{{question.id}}" class="moretoggle">Show answer(s) &gt;&gt;</a>
-        <div id="q{{question.id}}" class="toggleable">
-          <p><i>The correct answer(s):</i></p>
-	  <ol type="A">
-	    {% for answer in question.answer_set.all %}
-	      <li>
+<div class="casesanswerdisplay">
+    <a href="#q{{question.id}}" class="moretoggle">Show answer(s) &gt;&gt;</a>
+    <div id="q{{question.id}}" class="toggleable">
+        <p><i>The correct answer(s):</i></p>
+        <ol type="A">
+            {% for answer in question.answer_set.all %}
+            <li>
                 {% if answer.correct %}
-	          <span class="correctanswer">
-		{% else %}
-		  <span class="incorrectanswer" %>
-		{% endif %}
-		<span class="answer-inner">{{answer.label}}</span>
-                </span>
-              </li>
-	    {% endfor %}
-	  </ol>
-          <p>{{question.explanation|markdown}}</p>
-        </div>
-      </div>
+                <span class="correctanswer">
+                    {% else %}
+                    <span class="incorrectanswer" %>
+                        {% endif %}
+                        <span class="answer-inner">{{answer.label}}</span>
+                    </span>
+            </li>
+            {% endfor %}
+        </ol>
+        <p>{{question.explanation|markdown}}</p>
+    </div>
+</div>
 {% else %}
-  <p>{{question.explanation|markdown}}</p>
+<p>{{question.explanation|markdown}}</p>
 {% endif %}
