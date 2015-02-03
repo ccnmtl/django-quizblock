@@ -1,3 +1,10 @@
+1.0.2
+==================
+
+* UI improvements
+* Using the more standard "auto_add_now" instead of datetime.now for
+  tracking quiz submission time.
+
 1.0.1
 ==================
 
