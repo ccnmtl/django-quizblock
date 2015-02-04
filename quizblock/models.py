@@ -21,7 +21,7 @@ class Quiz(models.Model):
     importable = True
 
     def pageblock(self):
-        return self.pageblocks.all()[0]
+        return self.pageblocks.first()
 
     def __unicode__(self):
         return unicode(self.pageblock())
@@ -243,7 +243,7 @@ class Question(models.Model):
     def correct_answer_number(self):
         if self.question_type != "single choice":
             return None
-        return self.answer_set.filter(correct=True)[0]._order
+        return self.answer_set.filter(correct=True).first()._order
 
     def correct_answer_letter(self):
         if (self.question_type != "single choice"
@@ -278,10 +278,10 @@ class Question(models.Model):
     def user_responses(self, user):
         qs = Submission.objects.filter(user=user,
                                        quiz=self.quiz).order_by("-submitted")
-        if len(qs) == 0:
+        if qs.count() == 0:
             return Response.objects.none()
         else:
-            submission = qs[0]
+            submission = qs.first()
             return Response.objects.filter(question=self,
                                            submission=submission)
 
@@ -462,18 +462,18 @@ class QuestionColumn(ReportColumnInterface):
         if r.count() == 0:
             # user has not answered this question
             return None
-        submission = r[0]
+        submission = r.first()
         r = self._response_cache.filter(submission=submission)
         if r.count() > 0:
             if (self.question.is_short_text() or
                     self.question.is_long_text()):
-                value = r[0].value
+                value = r.first().value
             elif self.question.is_multiple_choice():
                 if self.answer.value in [res.value for res in r]:
                     value = self.answer.id
             else:  # single choice
                 for a in self._answer_cache:
-                    if a.value == r[0].value:
+                    if a.value == r.first().value:
                         value = a.id
                         break
 
