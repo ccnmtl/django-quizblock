@@ -126,14 +126,14 @@ class Quiz(models.Model):
         return d
 
     def import_from_dict(self, d):
-        self.description = d['description']
-        self.rhetorical = d['rhetorical']
+        self.description = d.get('description', '')
+        self.rhetorical = d.get('rhetorical', False)
         self.allow_redo = d.get('allow_redo', True)
         self.show_submit_state = d.get('show_submit_state', True)
         self.save()
         self.submission_set.all().delete()
         self.question_set.all().delete()
-        for q in d['questions']:
+        for q in d.get('questions', []):
             question = Question.objects.create(
                 quiz=self, text=q['text'],
                 question_type=q['question_type'],

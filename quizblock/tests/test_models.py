@@ -66,6 +66,16 @@ class TestBasics(TestCase):
         self.assertEquals(q.rhetorical, q2.rhetorical)
         self.assertEquals(q.show_submit_state, q2.show_submit_state)
 
+    def test_create_from_dict_defaults(self):
+        d = {
+            'description': 'Test Quiz',
+        }
+        q = Quiz.create_from_dict(d)
+        self.assertEquals(q.description, 'Test Quiz')
+        self.assertEquals(q.allow_redo, True)
+        self.assertEquals(q.rhetorical, False)
+        self.assertEquals(q.show_submit_state, True)
+
     def test_summary_render(self):
         q = Quiz(description="short")
         self.assertEqual(q.summary_render(), "short")
