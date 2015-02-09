@@ -1,4 +1,4 @@
-# Copyright (c) 2010, Columbia Center For New Media Teaching And Learning (CCNMTL)
+# Copyright (c) 2010-2015, Columbia Center For New Media Teaching And Learning (CCNMTL)
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="1.0.2",
+    version="1.0.3",
     author="Anders Pearson",
     author_email="anders@columbia.edu",
     url="https://github.com/ccnmtl/django-quizblock",
