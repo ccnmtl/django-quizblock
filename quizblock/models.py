@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericRelation
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import smart_str
@@ -9,7 +9,7 @@ from pagetree.reports import ReportableInterface, ReportColumnInterface
 
 
 class Quiz(models.Model):
-    pageblocks = generic.GenericRelation(PageBlock)
+    pageblocks = GenericRelation(PageBlock)
     description = models.TextField(blank=True)
     rhetorical = models.BooleanField(default=False)
     allow_redo = models.BooleanField(default=True)
