@@ -6,7 +6,7 @@
         <p><i>The correct answer(s):</i></p>
         <ol type="A">
             {% for answer in question.answer_set.all %}
-            <li>
+            <li class="{{answer.css_extra}}">
                 {% if answer.correct %}
                 <span class="correctanswer">
                     {% else %}
