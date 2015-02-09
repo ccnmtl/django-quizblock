@@ -326,6 +326,9 @@ class Answer(models.Model):
     label = models.TextField(blank=True)
     correct = models.BooleanField(default=False)
     explanation = models.TextField(blank=True)
+    css_extra = models.CharField(
+        max_length=256, blank=True,
+        help_text='extra CSS classes (space separated)')
 
     class Meta:
         ordering = ('question',)

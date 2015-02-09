@@ -5,7 +5,7 @@
 <ol type="A">
     {% for answer in question.answer_set.all %}
     {% if block.rhetorical %}
-    <li>
+    <li class="{{answer.css_extra}}">
         <label>
             <input name="question{{question.id}}"
                    value="{{answer.label}}" type="checkbox">
@@ -13,7 +13,7 @@
         </label>
     </li>
     {% else %}
-    <li>
+    <li class="{{answer.css_extra}}">
         {% if response %}
         {% comment %}
         multi select is trickier. since there can be more than one correct
