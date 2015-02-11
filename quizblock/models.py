@@ -1,6 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericRelation
+try:
+    from django.contrib.contenttypes.fields import GenericRelation
+except ImportError:
+    # Old location for django 1.6
+    from django.contrib.contenttypes.generic import GenericRelation
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import smart_str
