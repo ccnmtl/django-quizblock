@@ -139,17 +139,17 @@ class Quiz(models.Model):
         self.question_set.all().delete()
         for q in d.get('questions', []):
             question = Question.objects.create(
-                quiz=self, text=q['text'],
-                question_type=q['question_type'],
-                explanation=q['explanation'],
+                quiz=self, text=q.get('text', ''),
+                question_type=q.get('question_type', None),
+                explanation=q.get('explanation', ''),
                 intro_text=q['intro_text'])
-            for a in q['answers']:
+            for a in q.get('answers', []):
                 x = Answer.objects.create(question=question,
-                                          value=a['value'],
-                                          label=a['label'],
-                                          correct=a['correct'])
+                                          value=a.get('value', None),
+                                          label=a.get('label', ''),
+                                          correct=a.get('correct', False))
                 if 'explanation' in a:
-                    x.explanation = a['explanation']
+                    x.explanation = a.get('explanation', '')
                     x.save()
 
     def summary_render(self):
