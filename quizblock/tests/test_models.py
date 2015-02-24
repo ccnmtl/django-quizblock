@@ -76,6 +76,42 @@ class TestBasics(TestCase):
         self.assertEquals(q.rhetorical, False)
         self.assertEquals(q.show_submit_state, True)
 
+    def test_import_from_dict_defaults(self):
+        d = {
+            'description': 'Test Quiz',
+        }
+        q = Quiz()
+        q.import_from_dict(d)
+        self.assertEqual(q.description, 'Test Quiz')
+        self.assertEqual(q.allow_redo, True)
+        self.assertEqual(q.rhetorical, False)
+        self.assertEqual(q.show_submit_state, True)
+        self.assertEqual(q.submission_set.count(), 0)
+        self.assertEqual(q.question_set.count(), 0)
+
+    def test_import_from_dict_defaults_2(self):
+        d = {
+            'description': 'Test Quiz',
+            'rhetorical': False,
+            'allow_redo': False,
+            'show_submit_state': True,
+            'questions': [{
+                'text': 'Test Question',
+                'question_type': 'single choice',
+                'explanation': '',
+                'intro_text': '',
+                'answers': [],
+            }],
+        }
+        q = Quiz()
+        q.import_from_dict(d)
+        self.assertEqual(q.description, 'Test Quiz')
+        self.assertEqual(q.allow_redo, False)
+        self.assertEqual(q.rhetorical, False)
+        self.assertEqual(q.show_submit_state, True)
+        self.assertEqual(q.submission_set.count(), 0)
+        self.assertEqual(q.question_set.count(), 1)
+
     def test_summary_render(self):
         q = Quiz(description="short")
         self.assertEqual(q.summary_render(), "short")
