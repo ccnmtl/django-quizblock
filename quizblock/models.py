@@ -142,7 +142,7 @@ class Quiz(models.Model):
                 quiz=self, text=q.get('text', ''),
                 question_type=q.get('question_type', None),
                 explanation=q.get('explanation', ''),
-                intro_text=q['intro_text'])
+                intro_text=q.get('intro_text', ''))
             for a in q.get('answers', []):
                 x = Answer.objects.create(question=question,
                                           value=a.get('value', None),

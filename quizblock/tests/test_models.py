@@ -99,7 +99,6 @@ class TestBasics(TestCase):
                 'text': 'Test Question',
                 'question_type': 'single choice',
                 'explanation': '',
-                'intro_text': '',
                 'answers': [],
             }],
         }
@@ -111,6 +110,7 @@ class TestBasics(TestCase):
         self.assertEqual(q.show_submit_state, True)
         self.assertEqual(q.submission_set.count(), 0)
         self.assertEqual(q.question_set.count(), 1)
+        self.assertEqual(q.question_set.first().intro_text, '')
 
     def test_summary_render(self):
         q = Quiz(description="short")
