@@ -426,10 +426,13 @@ class AnswerTest(TestCase):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="single choice")
-        answer = Answer.objects.create(question=question, label="an answer")
+        answer = Answer.objects.create(question=question,
+                                       label="an answer",
+                                       css_extra='css-class')
         d = answer.as_dict()
-        self.assertEqual(d['label'], "an answer")
+        self.assertEqual(d['label'], 'an answer')
         self.assertFalse(d['correct'])
+        self.assertEqual(d['css_extra'], 'css-class')
 
     def test_quiz_round_trip(self):
         quiz = Quiz.objects.create()
@@ -438,11 +441,22 @@ class AnswerTest(TestCase):
         Answer.objects.create(question=question, label="an answer")
         Answer.objects.create(
             question=question, label="another answer",
-            explanation="an explanation")
+            explanation="an explanation", css_extra='css-class')
+        
         d = quiz.as_dict()
         quiz2 = Quiz.objects.create()
         quiz2.import_from_dict(d)
         self.assertEqual(quiz2.question_set.count(), 1)
+        q1 = quiz2.question_set.first()
+        
+        # validate answer parameters
+        a1 = q1.answer_set.get(label='an answer')
+        self.assertEqual(a1.css_extra, '')
+        self.assertEqual(a1.explanation, '')
+
+        a2 = q1.answer_set.get(label='another answer')
+        self.assertEqual(a2.css_extra, 'css-class')
+        self.assertEqual(a2.explanation, 'an explanation')
 
 
 class SubmissionTest(TestCase):

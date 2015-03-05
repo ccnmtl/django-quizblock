@@ -147,7 +147,8 @@ class Quiz(models.Model):
                 x = Answer.objects.create(question=question,
                                           value=a.get('value', None),
                                           label=a.get('label', ''),
-                                          correct=a.get('correct', False))
+                                          correct=a.get('correct', False),
+                                          css_extra=a.get('css_extra', ''))
                 if 'explanation' in a:
                     x.explanation = a.get('explanation', '')
                     x.save()
@@ -351,7 +352,8 @@ class Answer(models.Model):
         return dict(value=self.value,
                     label=self.label,
                     correct=self.correct,
-                    explanation=self.explanation)
+                    explanation=self.explanation,
+                    css_extra=self.css_extra)
 
 
 class Submission(models.Model):
