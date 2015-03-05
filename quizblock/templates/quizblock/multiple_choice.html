@@ -2,39 +2,53 @@
 {% load getresponse %}
 
 
-<ol type="A">
+<ol class="caseanswercontainer" type="A">
     {% for answer in question.answer_set.all %}
-    {% if block.rhetorical %}
-    <li class="{{answer.css_extra}}">
-        <label>
-            <input name="question{{question.id}}"
-                   value="{{answer.label}}" type="checkbox">
-            {{answer.label}}
-        </label>
-    </li>
-    {% else %}
-    <li class="{{answer.css_extra}}">
-        {% if response %}
-        {% comment %}
-        multi select is trickier. since there can be more than one correct
-        response and more than one response by the user.
-        {% endcomment %}
-        {% ifanswerin response answer %}
-        <span class="yours {% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}"
-              >{{answer.label}}</span>
+        {% if block.rhetorical %}
+            <li class="{{answer.css_extra}}">
+                <label>
+                    <input name="question{{question.id}}"
+                           value="{{answer.label}}" type="checkbox">
+                    <span class="caseanswerlabel">{{answer.label}}</span>
+                </label>
+            </li>
         {% else %}
-        <span class="{% if answer.correct %}correct{% else %}incorrect{% endif %}"
-              >{{answer.label}}</span>
-        {% endifanswerin %}
-        {% else %}
-        {% comment %}no response{% endcomment %}
-        <label>
-            <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
-                   value="{{answer.value}}" type="checkbox">
-            {{answer.label}}
-        </label>
+            <li class="{{answer.css_extra}}">
+                {% if response %}
+                    {% comment %}
+                    multi select is trickier. since there can be more than one correct
+                    response and more than one response by the user.
+                    {% endcomment %}
+                    
+                    <label>
+                    <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+                        value="{{answer.value}}" type="checkbox" disabled="disabled"
+                        class="{% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}"
+                        {% ifanswerin response answer %}checked="checked"{% else %}{% endifanswerin %} />
+                        <span class="caseanswerlabel">{{answer.label}}</span>
+                    </label>
+                    
+                    <span class="caseanswerresult">
+                        {% if response.is_correct %}
+                            <span class="correct label label-success">Correct</span>
+                        {% else %}
+                            <span class="incorrect label label-danger">Incorrect</span>
+                        {% endif %}
+                    </span>
+
+                    <div class="caseanswerexplanation">
+                        {{answer.explanation|safe}}
+                    </div>                    
+                    
+                {% else %}
+                    {% comment %}no response{% endcomment %}
+                    <label>
+                        <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+                               value="{{answer.value}}" type="checkbox">
+                        <span class="caseanswerlabel">{{answer.label}}</span>
+                    </label>
+                {% endif %}
+            </li>
         {% endif %}
-    </li>
-    {% endif %}
     {% endfor %}
 </ol>

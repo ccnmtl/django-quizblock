@@ -1,11 +1,11 @@
 {% load markup %}
 
-{% if block.rhetorical %}
-  <input type="text" name="question{{question.id}}" class="form-control"/>
-{% else %}
-  {% if response %}
-    <p class="yours">{{response.value|markdown}}</p>
-  {% else %}
-    <input type="text" name="pageblock-{{block.pageblock.id}}-question{{question.id}}" class="form-control" />
-  {% endif %}
-{% endif %}
+<div class="caseanswercontainer">
+    {% if block.rhetorical %}
+      <input type="text" name="question{{question.id}}" class="form-control"/>
+    {% else %}
+        <input type="text" class="form-control"
+            name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
+            {% if response %}disabled="disabled" value="{{response.value}}"{% endif %} />
+    {% endif %}
+</div>

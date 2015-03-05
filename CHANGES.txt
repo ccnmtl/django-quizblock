@@ -1,3 +1,9 @@
+1.0.5
+==================
+* refactoring base quiz templates based on general application requirements
+* making css classes consistent
+* Opting for "disabled" control approach rather than transforming responses into flat text
+
 1.0.4 (2015-02-18)
 ==================
 
