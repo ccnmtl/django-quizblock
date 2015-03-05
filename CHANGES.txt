@@ -1,3 +1,7 @@
+1.0.6
+==================
+* add css_extra to Answer import and export
+
 1.0.5
 ==================
 * refactoring base quiz templates based on general application requirements
