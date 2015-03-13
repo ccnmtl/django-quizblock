@@ -9,7 +9,7 @@
   <div class="casetitle"> Question {{question.display_number}}:</div>
 
   <div class="casecontent">
-    <div class="casequestion">
+    <div class="casequestion {{question.css_extra}}">
       <div class="casequestiontext">{{question.text|markdown}}</div>
       {% if question.answerable %}
       {% if block.rhetorical %}

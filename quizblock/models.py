@@ -225,6 +225,9 @@ class Question(models.Model):
         ))
     explanation = models.TextField(blank=True)
     intro_text = models.TextField(blank=True)
+    css_extra = models.TextField(
+        blank=True, null=True,
+        help_text='extra CSS classes (space separated)')
 
     class Meta:
         ordering = ('quiz',)
@@ -387,11 +390,13 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         exclude = ("quiz",)
-        fields = ('question_type', 'intro_text', 'text', 'explanation')
+        fields = ('question_type', 'intro_text', 'text', 'explanation',
+                  'css_extra')
         widgets = {
             'intro_text': forms.widgets.Textarea(attrs={'rows': 4}),
             'text': forms.widgets.Textarea(attrs={'rows': 4}),
             'explanation': forms.widgets.Textarea(attrs={'rows': 4}),
+            'css_extra': forms.widgets.TextInput(),
         }
 
 
