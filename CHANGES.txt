@@ -1,8 +1,12 @@
-1.0.6
+1.0.7
+==================
+* Add css_extra attribute to Question model
+
+1.0.6 (2015-03-05)
 ==================
 * add css_extra to Answer import and export
 
-1.0.5
+1.0.5 (2015-03-05)
 ==================
 * refactoring base quiz templates based on general application requirements
 * making css classes consistent

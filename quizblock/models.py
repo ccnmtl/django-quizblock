@@ -142,7 +142,8 @@ class Quiz(models.Model):
                 quiz=self, text=q.get('text', ''),
                 question_type=q.get('question_type', None),
                 explanation=q.get('explanation', ''),
-                intro_text=q.get('intro_text', ''))
+                intro_text=q.get('intro_text', ''),
+                css_extra=q.get('css_extra', ''))
             for a in q.get('answers', []):
                 x = Answer.objects.create(question=question,
                                           value=a.get('value', None),
@@ -225,6 +226,9 @@ class Question(models.Model):
         ))
     explanation = models.TextField(blank=True)
     intro_text = models.TextField(blank=True)
+    css_extra = models.TextField(
+        blank=True, null=True,
+        help_text='extra CSS classes (space separated)')
 
     class Meta:
         ordering = ('quiz',)
@@ -296,6 +300,7 @@ class Question(models.Model):
             question_type=self.question_type,
             explanation=self.explanation,
             intro_text=self.intro_text,
+            css_extra=self.css_extra,
             answers=[a.as_dict() for a in self.answer_set.all()]
         )
 
@@ -387,11 +392,13 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         exclude = ("quiz",)
-        fields = ('question_type', 'intro_text', 'text', 'explanation')
+        fields = ('question_type', 'intro_text', 'text', 'explanation',
+                  'css_extra')
         widgets = {
             'intro_text': forms.widgets.Textarea(attrs={'rows': 4}),
             'text': forms.widgets.Textarea(attrs={'rows': 4}),
             'explanation': forms.widgets.Textarea(attrs={'rows': 4}),
+            'css_extra': forms.widgets.TextInput(),
         }
 
 

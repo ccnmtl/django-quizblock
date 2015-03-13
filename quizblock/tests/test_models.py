@@ -437,7 +437,9 @@ class AnswerTest(TestCase):
     def test_quiz_round_trip(self):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
-            quiz=quiz, text="foo", question_type="single choice")
+            quiz=quiz, text="foo", question_type="single choice",
+            css_extra="test-css-class"
+        )
         Answer.objects.create(question=question, label="an answer")
         Answer.objects.create(
             question=question, label="another answer",
@@ -448,6 +450,8 @@ class AnswerTest(TestCase):
         quiz2.import_from_dict(d)
         self.assertEqual(quiz2.question_set.count(), 1)
         q1 = quiz2.question_set.first()
+
+        self.assertEqual(q1.css_extra, question.css_extra)
         
         # validate answer parameters
         a1 = q1.answer_set.get(label='an answer')
