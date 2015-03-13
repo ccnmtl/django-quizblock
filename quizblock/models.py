@@ -142,7 +142,8 @@ class Quiz(models.Model):
                 quiz=self, text=q.get('text', ''),
                 question_type=q.get('question_type', None),
                 explanation=q.get('explanation', ''),
-                intro_text=q.get('intro_text', ''))
+                intro_text=q.get('intro_text', ''),
+                css_extra=q.get('css_extra', ''))
             for a in q.get('answers', []):
                 x = Answer.objects.create(question=question,
                                           value=a.get('value', None),
@@ -299,6 +300,7 @@ class Question(models.Model):
             question_type=self.question_type,
             explanation=self.explanation,
             intro_text=self.intro_text,
+            css_extra=self.css_extra,
             answers=[a.as_dict() for a in self.answer_set.all()]
         )
 
