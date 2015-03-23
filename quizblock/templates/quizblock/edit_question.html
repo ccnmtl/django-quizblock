@@ -19,8 +19,8 @@
             background-color: #ddd;
         }
         .dragging { border: #f60 solid 1px; }
+        .correct-answer { color: green; }
     </style>
-
 {% endblock %}
 
 {% block js %}
@@ -72,7 +72,7 @@
 <span title="drag to reorder answers" class="draghandle ui-icon ui-icon-arrowthick-2-n-s"></span>[<a href="{% url 'delete-answer' answer.id %}">delete</a>]
 Answer {{ answer.display_number }}:
 <a href="{% url 'edit-answer' answer.id %}">{{answer.label}}</a>
-{% if answer.correct %}<i class="icon-ok"></i>{% endif %}
+{% if answer.correct %}<span class="correct-answer">&#10004;</span>{% endif %}
 </li>
 {% endfor %}
 </ul>
