@@ -1,3 +1,7 @@
+1.0.8 (2015-03-23)
+==================
+* in edit question interface, indicate which answers were marked as correct
+
 1.0.7 (2015-03-13)
 ==================
 * Add css_extra attribute to Question model
