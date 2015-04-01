@@ -1,15 +1,16 @@
 from django import forms
 from django.contrib.auth.models import User
-try:
-    from django.contrib.contenttypes.fields import GenericRelation
-except ImportError:
-    # Old location for django 1.6
-    from django.contrib.contenttypes.generic import GenericRelation
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
 from pagetree.reports import ReportableInterface, ReportColumnInterface
+
+try:
+    from django.contrib.contenttypes.fields import GenericRelation
+except ImportError:
+    # Old location for django 1.6
+    from django.contrib.contenttypes.generic import GenericRelation
 
 
 class Quiz(models.Model):
@@ -171,7 +172,6 @@ class Quiz(models.Model):
                                                   question=q, answer=a))
             else:
                 columns.append(QuestionColumn(hierarchy=hierarchy, question=q))
-
         return columns
 
     def report_values(self):
@@ -186,7 +186,6 @@ class Quiz(models.Model):
             else:
                 # single choice, short text and long text need only one row
                 columns.append(QuestionColumn(hierarchy=hierarchy, question=q))
-
         return columns
 
     def score(self, user):
@@ -426,12 +425,10 @@ class QuestionColumn(ReportColumnInterface):
         self.question = question
         self.answer = answer
 
-        self._submission_cache = Submission.objects.filter(
-            quiz=self.question.quiz)
-        self._response_cache = Response.objects.filter(
-            question=self.question)
-        self._answer_cache = self.question.answer_set.all()
-
+        self._answer_cache = {}
+        for a in self.question.answer_set.all():
+            self._answer_cache[a.value] = a.id
+            
     @classmethod
     def clean_header(cls, s):
         s = s.replace('<p>', '')
@@ -445,7 +442,7 @@ class QuestionColumn(ReportColumnInterface):
         s = s.replace('\"', '')
         s = s.replace(',', '')
         s = s.encode('utf-8')
-        return s
+        return s            
 
     def question_id(self):
         return "%s_%s" % (self.hierarchy.id, self.question.id)
@@ -473,24 +470,25 @@ class QuestionColumn(ReportColumnInterface):
         return row
 
     def user_value(self, user):
-        value = ''
-        r = self._submission_cache.filter(user=user).order_by("-submitted")
-        if r.count() == 0:
-            # user has not answered this question
-            return None
-        submission = r.first()
-        r = self._response_cache.filter(submission=submission)
-        if r.count() > 0:
-            if (self.question.is_short_text() or
-                    self.question.is_long_text()):
-                value = r.first().value
-            elif self.question.is_multiple_choice():
-                if self.answer.value in [res.value for res in r]:
-                    value = self.answer.id
-            else:  # single choice
-                for a in self._answer_cache:
-                    if a.value == r.first().value:
-                        value = a.id
-                        break
+        value = None
+        submission = Submission.objects.filter(
+            quiz=self.question.quiz, user=user).order_by("-submitted").first()
+        if submission:
+            value = ''
+            responses = submission.response_set
 
-        return smart_str(value)
+            if responses.count() > 0:
+                if self.question.is_single_choice():
+                    # map the answer id to the answer value
+                    first_value = responses.first().value
+                    value = self._answer_cache[first_value]
+                elif self.question.is_multiple_choice():
+                    # did the user select the specified answer?
+                    values = responses.values_list('value', flat=True)
+                    if self.answer.value in values:
+                        value = self.answer.id
+                else:  # short or long text
+                    value = responses.first().value
+                    
+            value = smart_str(value)
+        return value
