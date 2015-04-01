@@ -428,7 +428,7 @@ class QuestionColumn(ReportColumnInterface):
         self._answer_cache = {}
         for a in self.question.answer_set.all():
             self._answer_cache[a.value] = a.id
-            
+
     @classmethod
     def clean_header(cls, s):
         s = s.replace('<p>', '')
@@ -442,7 +442,7 @@ class QuestionColumn(ReportColumnInterface):
         s = s.replace('\"', '')
         s = s.replace(',', '')
         s = s.encode('utf-8')
-        return s            
+        return s
 
     def question_id(self):
         return "%s_%s" % (self.hierarchy.id, self.question.id)
@@ -489,6 +489,6 @@ class QuestionColumn(ReportColumnInterface):
                         value = self.answer.id
                 else:  # short or long text
                     value = responses.first().value
-                    
+
             value = smart_str(value)
         return value
