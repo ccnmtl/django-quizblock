@@ -1,6 +1,7 @@
 """ run tests for pagetree
 
 $ virtualenv ve
+$ ./ve/bin/pip install Django==1.8
 $ ./ve/bin/pip install -r test_reqs.txt
 $ ./ve/bin/python runtests.py
 """
@@ -18,16 +19,12 @@ def main():
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'pagetree',
-            'django_nose',
             'django_markwhat',
             'django_jenkins',
             'quizblock'
         ),
-        TEST_RUNNER='django_nose.NoseTestSuiteRunner',
+        TEST_RUNNER='django.test.runner.DiscoverRunner',
         MIDDLEWARE_CLASSES=[],
-        NOSE_ARGS = [
-            '--cover-package=quizblock',
-        ],
         JENKINS_TASKS = (
             'django_jenkins.tasks.with_coverage',
         ),
@@ -51,7 +48,11 @@ def main():
                 }
             }
     )
-    django.setup()
+    try:
+        django.setup()
+    except AttributeError:
+        pass
+
     # Fire off the tests
     call_command('jenkins')
 
