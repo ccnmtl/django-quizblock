@@ -40,6 +40,5 @@ setup(
     zip_safe=False,
     package_data = {'' : ['*.*']},
     packages=find_packages(),
-    test_suite='nose.collector',
     include_package_data=True,
     )
