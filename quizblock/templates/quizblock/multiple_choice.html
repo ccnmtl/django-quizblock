@@ -9,7 +9,7 @@
                 <label>
                     <input name="question{{question.id}}"
                            value="{{answer.label}}" type="checkbox">
-                    <span class="caseanswerlabel">{{answer.label}}</span>
+                    <span class="caseanswerlabel">{{answer.label|safe}}</span>
                 </label>
             </li>
         {% else %}
@@ -25,7 +25,7 @@
                         value="{{answer.value}}" type="checkbox" disabled="disabled"
                         class="{% if answer.correct %}correct correctanswer{% else %}incorrect incorrectanswer{% endif %}"
                         {% ifanswerin response answer %}checked="checked"{% else %}{% endifanswerin %} />
-                        <span class="caseanswerlabel">{{answer.label}}</span>
+                        <span class="caseanswerlabel">{{answer.label|safe}}</span>
                     </label>
                     
                     <span class="caseanswerresult">
@@ -45,7 +45,7 @@
                     <label>
                         <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
                                value="{{answer.value}}" type="checkbox">
-                        <span class="caseanswerlabel">{{answer.label}}</span>
+                        <span class="caseanswerlabel">{{answer.label|safe}}</span>
                     </label>
                 {% endif %}
             </li>

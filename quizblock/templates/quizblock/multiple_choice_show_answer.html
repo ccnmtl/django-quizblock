@@ -12,7 +12,7 @@
                         {% else %}
                         <span class="incorrectanswer" %>
                             {% endif %}
-                            <span class="answer-inner">{{answer.label}}</span>
+                            <span class="answer-inner">{{answer.label|safe}}</span>
                         </span>
                 </li>
                 {% endfor %}

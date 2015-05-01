@@ -7,7 +7,7 @@
                 <label>
                     <input name="question{{question.id}}" value="{{answer.label}}"
                            type="radio">
-                    {{answer.label}}
+                    {{answer.label|safe}}
                 </label>
             </li>
         {% else %}
@@ -20,7 +20,7 @@
                         {% ifequal response.value answer.value %}
                             class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}"
                             checked="checked"
-                        {% endifequal %}/> <span class="caseanswerlabel">{{answer.label}}</span>
+                        {% endifequal %}/> <span class="caseanswerlabel">{{answer.label|safe}}</span>
                     </label>
                     
                     <span class="caseanswerresult">
@@ -38,7 +38,7 @@
                     <label>
                         <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
                                value="{{answer.value}}" type="radio">
-                        <span class="caseanswerlabel">{{answer.label}}</span>
+                        <span class="caseanswerlabel">{{answer.label|safe}}</span>
                     </label>
                 {% endif %}
             </li>
