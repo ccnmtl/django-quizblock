@@ -1,7 +1,7 @@
 """ run tests for pagetree
 
 $ virtualenv ve
-$ ./ve/bin/pip install Django==1.8
+$ ./ve/bin/pip install Django==1.8.1
 $ ./ve/bin/pip install -r test_reqs.txt
 $ ./ve/bin/python runtests.py
 """

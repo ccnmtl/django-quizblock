@@ -473,24 +473,34 @@ class SubmissionTest(TestCase):
 
 
 class ResponseTest(TestCase):
+    def setUp(self):
+        self.quiz = Quiz.objects.create()
+        self.question = Question.objects.create(
+            quiz=self.quiz, text="foo", question_type="single choice")
+        self.answer = Answer.objects.create(
+            question=self.question,
+            label="an answer")
+        self.user = User.objects.create(username="testuser")
+        self.submission = Submission.objects.create(
+            quiz=self.quiz, user=self.user)
+
     def test_unicode(self):
-        quiz = Quiz.objects.create()
-        question = Question.objects.create(
-            quiz=quiz, text="foo", question_type="single choice")
-        Answer.objects.create(question=question, label="an answer")
-        user = User.objects.create(username="testuser")
-        s = Submission.objects.create(quiz=quiz, user=user)
         response = Response.objects.create(
-            question=question, submission=s, value="an answer")
+            question=self.question,
+            submission=self.submission,
+            value=self.answer.label)
         self.assertTrue(str(response).startswith("response to "))
 
     def test_is_correct(self):
-        quiz = Quiz.objects.create()
-        question = Question.objects.create(
-            quiz=quiz, text="foo", question_type="single choice")
-        Answer.objects.create(question=question, label="an answer")
-        user = User.objects.create(username="testuser")
-        s = Submission.objects.create(quiz=quiz, user=user)
         response = Response.objects.create(
-            question=question, submission=s, value="an answer")
+            question=self.question,
+            submission=self.submission,
+            value=self.answer.label)
         self.assertFalse(response.is_correct())
+
+    def test_answer(self):
+        response = Response.objects.create(
+            question=self.question,
+            submission=self.submission,
+            value=self.answer.label)
+        self.assertEqual(response.answer(), self.answer)

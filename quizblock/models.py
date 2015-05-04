@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
 from pagetree.reports import ReportableInterface, ReportColumnInterface
@@ -385,6 +386,16 @@ class Response(models.Model):
 
     def is_correct(self):
         return self.value in self.question.correct_answer_values()
+
+    def answer(self):
+        """Returns the Answer associated with this Response.
+
+        Not every Response has an Answer associated with it. This
+        method is useful, for example, for single-choice quizzes.
+        """
+        return Answer.objects.filter(
+            Q(question=self.question),
+            Q(value=self.value) | Q(label=self.value)).first()
 
 
 class QuestionForm(forms.ModelForm):
