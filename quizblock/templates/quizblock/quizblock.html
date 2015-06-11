@@ -1,5 +1,6 @@
 {% load markup %}
 {% load getresponse %}
+{% load static from staticfiles %}
 {{ block.description|markdown }}
 
 {% if request.user.is_anonymous %}
@@ -11,8 +12,7 @@
 {% endfor %}
 
 {% if block.rhetorical %}
-  <script src="http://mt.ccnmtl.columbia.edu/pedialabs/js/quizshow.js"></script>
+  <script src="{% static 'quizblock/js/quizshow.js' %}"></script>
 {% endif %}
-
 
 {% endif %}
