@@ -1,3 +1,7 @@
+1.1.2
+==================
+* Add missing Quiz.show_submit_state migration
+
 1.1.1 (2015-05-04)
 ==================
 * Add Response.answer() method
