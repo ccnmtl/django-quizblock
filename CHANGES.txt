@@ -1,4 +1,4 @@
-1.1.2
+1.1.2 (2015-06-24)
 ==================
 * Add missing Quiz.show_submit_state migration
 
