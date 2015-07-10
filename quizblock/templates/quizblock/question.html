@@ -12,24 +12,16 @@
     <div class="casequestion {{question.css_extra}}">
       <div class="casequestiontext">{{question.text|markdown}}</div>
       {% if question.answerable %}
-      {% if block.rhetorical %}
-      <form id="form-{{question.id}}" method="post">{% csrf_token %}
-      {% endif %}
-
-    {% if question.is_single_choice %}
-      {% include 'quizblock/single_choice.html' %}
-    {% endif %}
-
-    {% if question.is_single_choice_dropdown %}
-      {% include 'quizblock/single_choice_dropdown.html' %}
-    {% endif %}
-
-    {% if question.is_multiple_choice %}
-      {% include 'quizblock/multiple_choice.html' %}
-    {% endif %}
-
-        {% if block.rhetorical %}
-          </form>
+        {% if question.is_single_choice %}
+          {% include 'quizblock/single_choice.html' %}
+        {% endif %}
+    
+        {% if question.is_single_choice_dropdown %}
+          {% include 'quizblock/single_choice_dropdown.html' %}
+        {% endif %}
+    
+        {% if question.is_multiple_choice %}
+          {% include 'quizblock/multiple_choice.html' %}
         {% endif %}
       {% else %}
         {% if question.is_short_text %}
