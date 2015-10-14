@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="1.1.3",
+    version="1.1.4",
     author="Anders Pearson",
     author_email="anders@columbia.edu",
     url="https://github.com/ccnmtl/django-quizblock",

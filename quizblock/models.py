@@ -486,7 +486,7 @@ class QuestionColumn(ReportColumnInterface):
             quiz=self.question.quiz, user=user).order_by("-submitted").first()
         if submission:
             value = ''
-            responses = submission.response_set
+            responses = submission.response_set.filter(question=self.question)
 
             if responses.count() > 0:
                 if self.question.is_single_choice():

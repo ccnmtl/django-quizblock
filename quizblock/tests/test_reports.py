@@ -42,6 +42,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.submission = Submission.objects.create(quiz=quiz, user=self.user)
 
         self.report = PagetreeReport()
+        self.quiz = quiz
 
     def test_clean_header_empty(self):
         self.assertEqual(QuestionColumn.clean_header(''), '')
@@ -65,8 +66,8 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.metadata(), key_row)
 
         # user value
-        answer = self.single_answer.answer_set.get(value='0')
-        self.assertEquals(column.user_value(self.user), str(answer.id))
+        self.assertEquals(column.user_value(self.user),
+                          str(self.single_answer_two.id))
         self.assertEquals(column.user_value(self.user2), None)
 
     def test_multiple_answer(self):
@@ -129,6 +130,43 @@ class QuestionColumnTest(PagetreeTestCase):
         # user value
         self.assertEquals(column.user_value(self.user), 'a longer response')
         self.assertEquals(column.user_value(self.user2), None)
+
+    def test_user_value_multiple_responses(self):
+        alt_single_answer = Question.objects.create(
+            quiz=self.quiz, text='single answer 2', question_type='single choice')
+        alt_answer_one = Answer.objects.create(
+            question=alt_single_answer, label='Maybe', value='2')
+        Answer.objects.create(
+            question=alt_single_answer, label='Never', value='3')
+
+        Response.objects.create(submission=self.submission,
+                                question=self.short_text,
+                                value='foo bar baz')
+        Response.objects.create(submission=self.submission,
+                                question=alt_single_answer,
+                                value='2')
+        Response.objects.create(submission=self.submission,
+                                question=self.multiple_answer,
+                                value='1')
+        Response.objects.create(submission=self.submission,
+                                question=self.single_answer,
+                                value='0')
+
+        column = QuestionColumn(self.hierarchy_one, self.single_answer)
+        self.assertEquals(column.user_value(self.user),
+                          str(self.single_answer_two.id))
+
+        column = QuestionColumn(self.hierarchy_one, alt_single_answer)
+        self.assertEquals(column.user_value(self.user),
+                          str(alt_answer_one.id))
+
+        column = QuestionColumn(self.hierarchy_one, self.multiple_answer,
+                                self.multiple_answer_one)
+        self.assertEquals(column.user_value(self.user),
+                          str(self.multiple_answer_one.id))
+
+        column = QuestionColumn(self.hierarchy_one, self.short_text)
+        self.assertEquals(column.user_value(self.user), 'foo bar baz')
 
     def test_report_metadata_columns(self):
         hierarchies = Hierarchy.objects.filter(name="one")
