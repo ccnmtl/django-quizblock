@@ -1,4 +1,6 @@
 * remove last references to pagetree_export
+* remove pre 1.7 south migrations
+* use AppConfig for registering reportables
 
 1.1.4 (2015-10-14)
 ==================
