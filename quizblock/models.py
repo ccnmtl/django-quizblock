@@ -231,7 +231,6 @@ class Question(models.Model):
         help_text='extra CSS classes (space separated)')
 
     class Meta:
-        ordering = ('quiz',)
         order_with_respect_to = 'quiz'
 
     def __unicode__(self):
@@ -341,7 +340,6 @@ class Answer(models.Model):
         help_text='extra CSS classes (space separated)')
 
     class Meta:
-        ordering = ('question',)
         order_with_respect_to = 'question'
 
     def __unicode__(self):
