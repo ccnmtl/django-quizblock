@@ -1,3 +1,8 @@
+1.2.0 (2016-03-28)
+==================
+
+* drop support for Django < 1.8
+* add support for Django 1.9
 * remove last references to pagetree_export
 * remove pre 1.7 south migrations
 * use AppConfig for registering reportables
