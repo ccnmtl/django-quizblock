@@ -20,14 +20,10 @@ def main():
             'django.contrib.sessions',
             'pagetree',
             'django_markwhat',
-            'django_jenkins',
             'quizblock'
         ),
         TEST_RUNNER='django.test.runner.DiscoverRunner',
         MIDDLEWARE_CLASSES=[],
-        JENKINS_TASKS = (
-            'django_jenkins.tasks.with_coverage',
-        ),
         PROJECT_APPS = [
             'quizblock',
         ],
@@ -54,7 +50,7 @@ def main():
         pass
 
     # Fire off the tests
-    call_command('jenkins')
+    call_command('test')
 
 if __name__ == '__main__':
     main()

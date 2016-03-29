@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 from pagetree.tests.factories import UserFactory
 from quizblock.models import Quiz, Question, Answer
@@ -8,8 +8,6 @@ from quizblock.views import EditQuizView, AddQuestionToQuizView, \
 
 
 class LoggedInViewTest(TestCase):
-    urls = 'quizblock.urls'
-
     def setUp(self):
         self.factory = RequestFactory()
         self.user = UserFactory()
@@ -25,6 +23,7 @@ class LoggedInViewTest(TestCase):
         self.single_answer_two = Answer.objects.create(
             question=self.single_answer, label='No', value='0')
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_edit_quiz(self):
         url = "/quizblock/edit_quiz/%s/" % self.quiz.id
         request = self.factory.get(url)
@@ -33,6 +32,7 @@ class LoggedInViewTest(TestCase):
         response = EditQuizView.as_view()(request, pk=self.quiz.id)
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_question_to_quiz(self):
         self.assertEquals(self.quiz.question_set.count(), 1)
         url = "/quizblock/edit_quiz/%s/add_question" % self.quiz.id
@@ -53,6 +53,7 @@ class LoggedInViewTest(TestCase):
         self.assertEquals(question.explanation, 'the explanation')
         self.assertEquals(question.question_type, 'short text')
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_edit_question(self):
         question = self.quiz.question_set.all()[0]
         url = "/quizblock/edit_question/%s/" % question.id
@@ -72,6 +73,7 @@ class LoggedInViewTest(TestCase):
         self.assertEquals(question.explanation, 'alt explanation')
         self.assertEquals(question.question_type, 'short text')
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_answer_to_question(self):
         question = self.quiz.question_set.all()[0]
         self.assertEquals(question.answer_set.count(), 2)
@@ -91,6 +93,7 @@ class LoggedInViewTest(TestCase):
         self.assertEquals(answer.explanation, 'the explanation')
         self.assertEquals(answer.value, '2')
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_answer_to_question_emptylabel(self):
         question = self.quiz.question_set.all()[0]
         url = '/quizblock/edit_question/%s/add_answer/' % question.id
@@ -106,6 +109,7 @@ class LoggedInViewTest(TestCase):
         self.assertEquals(question.answer_set.count(), 3)
         question.answer_set.get(label='Maybe')
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_delete_question(self):
         question = self.quiz.question_set.all()[0]
         url = '/quizblock/delete_question/%s/' % question.id
@@ -160,6 +164,7 @@ class LoggedInViewTest(TestCase):
         self.single_answer = Question.objects.get(text='single answer')
         self.assertEqual(self.single_answer.display_number(), 2)
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_delete_answer(self):
         question = self.quiz.question_set.all()[0]
         self.assertEquals(question.answer_set.count(), 2)
@@ -174,6 +179,7 @@ class LoggedInViewTest(TestCase):
 
         self.assertEquals(question.answer_set.count(), 1)
 
+    @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_edit_answer(self):
         question = self.quiz.question_set.all()[0]
         answer = question.answer_set.all()[0]

@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
-from pagetree.reports import ReportableInterface, ReportColumnInterface
+from pagetree.reports import ReportColumnInterface
 
 try:
     from django.contrib.contenttypes.fields import GenericRelation
@@ -208,8 +208,6 @@ class Quiz(models.Model):
 
         return score / self.question_set.count()
 
-ReportableInterface.register(Quiz)
-
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz)
@@ -231,7 +229,6 @@ class Question(models.Model):
         help_text='extra CSS classes (space separated)')
 
     class Meta:
-        ordering = ('quiz',)
         order_with_respect_to = 'quiz'
 
     def __unicode__(self):
@@ -341,7 +338,6 @@ class Answer(models.Model):
         help_text='extra CSS classes (space separated)')
 
     class Meta:
-        ordering = ('question',)
         order_with_respect_to = 'question'
 
     def __unicode__(self):
