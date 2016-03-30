@@ -7,11 +7,7 @@ from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
 from pagetree.reports import ReportColumnInterface
 
-try:
-    from django.contrib.contenttypes.fields import GenericRelation
-except ImportError:
-    # Old location for django 1.6
-    from django.contrib.contenttypes.generic import GenericRelation
+from django.contrib.contenttypes.fields import GenericRelation
 
 
 class Quiz(models.Model):
