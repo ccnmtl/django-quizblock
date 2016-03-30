@@ -10,7 +10,11 @@ env:
 install:
   - pip install -q $DJANGO --use-mirrors
   - pip install -q -r test_reqs.txt --use-mirrors
+  - pip install coveralls
 
 # command to run tests
 script:
   - python runtests.py
+  - coverage run --source=quizblock runtests.py
+after_success:
+  - coveralls
