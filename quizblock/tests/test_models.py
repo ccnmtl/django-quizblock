@@ -1,7 +1,10 @@
+from __future__ import unicode_literals
+
 from django.test import TestCase
 from quizblock.models import Quiz, Question, Answer, Submission
 from quizblock.models import Response
 from django.contrib.auth.models import User
+from django.utils.encoding import smart_text
 
 
 class FakeReq(object):
@@ -115,7 +118,7 @@ class TestBasics(TestCase):
     def test_summary_render(self):
         q = Quiz(description="short")
         self.assertEqual(q.summary_render(), "short")
-        q.description = ''.join(str(x) for x in range(75))
+        q.description = ''.join(smart_text(x) for x in range(75))
         expected = ('012345678910111213141516171819202122'
                     '2324252627282930313233343...')
         self.assertEqual(q.summary_render(), expected)
@@ -173,11 +176,11 @@ class UserTests(TestCase):
 
 
 class QuestionTest(TestCase):
-    def test_unicode(self):
+    def test_str(self):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="long text")
-        self.assertEqual(str(question), "foo")
+        self.assertEqual(smart_text(question), "foo")
 
     def test_display_number(self):
         quiz = Quiz.objects.create()
@@ -407,12 +410,12 @@ class TestIsUserCorrect(TestCase):
 
 
 class AnswerTest(TestCase):
-    def test_unicode(self):
+    def test_str(self):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="single choice")
         answer = Answer.objects.create(question=question, label="an answer")
-        self.assertEqual(str(answer), "an answer")
+        self.assertEqual(smart_text(answer), "an answer")
 
     def test_edit_form(self):
         quiz = Quiz.objects.create()
@@ -464,12 +467,13 @@ class AnswerTest(TestCase):
 
 
 class SubmissionTest(TestCase):
-    def test_unicode(self):
+    def test_str(self):
         quiz = Quiz.objects.create()
         user = User.objects.create(username="testuser")
         s = Submission.objects.create(quiz=quiz, user=user)
         self.assertTrue(
-            str(s).startswith("quiz %d submission by testuser" % quiz.id))
+            smart_text(s).startswith(
+                "quiz %d submission by testuser" % quiz.id))
 
 
 class ResponseTest(TestCase):
@@ -484,12 +488,12 @@ class ResponseTest(TestCase):
         self.submission = Submission.objects.create(
             quiz=self.quiz, user=self.user)
 
-    def test_unicode(self):
+    def test_str(self):
         response = Response.objects.create(
             question=self.question,
             submission=self.submission,
             value=self.answer.label)
-        self.assertTrue(str(response).startswith("response to "))
+        self.assertTrue(smart_text(response).startswith("response to "))
 
     def test_is_correct(self):
         response = Response.objects.create(
