@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.test import TestCase
 from quizblock.models import Quiz, Question, Answer, Submission
 from quizblock.models import Response

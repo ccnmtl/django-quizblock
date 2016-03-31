@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from pagetree.models import Hierarchy
 from pagetree.reports import PagetreeReport
 from quizblock.models import Quiz, Question, Answer, Submission, \
@@ -45,10 +47,10 @@ class QuestionColumnTest(PagetreeTestCase):
         self.quiz = quiz
 
     def test_clean_header_empty(self):
-        self.assertEqual(QuestionColumn.clean_header(''), '')
+        self.assertEqual(QuestionColumn.clean_header(''), b'')
 
     def test_clean_header(self):
-        self.assertEqual(QuestionColumn.clean_header('<<<<foo>>>>'), 'foo')
+        self.assertEqual(QuestionColumn.clean_header('<<<<foo>>>>'), b'foo')
 
     def test_single_answer(self):
         Response.objects.create(submission=self.submission,
@@ -62,7 +64,8 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = ['one', identifier, 'Quiz', 'single choice', 'single answer']
+        key_row = ['one', identifier, 'Quiz', 'single choice',
+                   b'single answer']
         self.assertEquals(column.metadata(), key_row)
 
         # user value
@@ -87,7 +90,7 @@ class QuestionColumnTest(PagetreeTestCase):
         # key row
         identifier = '%s_%s' % (self.hierarchy_one.id, self.multiple_answer.id)
         key_row = ['one', identifier, 'Quiz', 'multiple choice',
-                   'multiple answer', a.id, a.label]
+                   b'multiple answer', a.id, a.label.encode('utf-8')]
         self.assertEquals(column.metadata(), key_row)
 
         # user value
@@ -105,7 +108,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = ['one', identifier, 'Quiz', 'short text', 'short text']
+        key_row = ['one', identifier, 'Quiz', 'short text', b'short text']
         self.assertEquals(column.metadata(), key_row)
 
         # user value
@@ -124,7 +127,7 @@ class QuestionColumnTest(PagetreeTestCase):
         self.assertEquals(column.identifier(), identifier)
 
         # key row
-        key_row = ['one', identifier, 'Quiz', 'long text', 'long text']
+        key_row = ['one', identifier, 'Quiz', 'long text', b'long text']
         self.assertEquals(column.metadata(), key_row)
 
         # user value

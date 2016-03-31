@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 from pagetree.tests.factories import UserFactory

@@ -1,15 +1,19 @@
+from __future__ import unicode_literals
+
 from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
-from django.utils.encoding import smart_str
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.encoding import smart_text
 from pagetree.models import PageBlock
 from pagetree.reports import ReportColumnInterface
 
 from django.contrib.contenttypes.fields import GenericRelation
 
 
+@python_2_unicode_compatible
 class Quiz(models.Model):
     pageblocks = GenericRelation(PageBlock)
     description = models.TextField(blank=True)
@@ -25,8 +29,8 @@ class Quiz(models.Model):
     def pageblock(self):
         return self.pageblocks.first()
 
-    def __unicode__(self):
-        return unicode(self.pageblock())
+    def __str__(self):
+        return smart_text(self.pageblock())
 
     def needs_submit(self):
         return not self.rhetorical
@@ -205,6 +209,7 @@ class Quiz(models.Model):
         return score / self.question_set.count()
 
 
+@python_2_unicode_compatible
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz)
     text = models.TextField(help_text='Required')
@@ -227,7 +232,7 @@ class Question(models.Model):
     class Meta:
         order_with_respect_to = 'quiz'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
     def display_number(self):
@@ -323,6 +328,7 @@ class Question(models.Model):
         return correct
 
 
+@python_2_unicode_compatible
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     value = models.CharField(max_length=256)
@@ -336,7 +342,7 @@ class Answer(models.Model):
     class Meta:
         order_with_respect_to = 'question'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label
 
     def display_number(self):
@@ -353,17 +359,19 @@ class Answer(models.Model):
                     css_extra=self.css_extra)
 
 
+@python_2_unicode_compatible
 class Submission(models.Model):
     quiz = models.ForeignKey(Quiz)
     user = models.ForeignKey(User)
     submitted = models.DateTimeField(auto_now_add=True, editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return "quiz %d submission by %s at %s" % (self.quiz.id,
-                                                   unicode(self.user),
+                                                   smart_text(self.user),
                                                    self.submitted)
 
 
+@python_2_unicode_compatible
 class Response(models.Model):
     question = models.ForeignKey(Question)
     submission = models.ForeignKey(Submission)
@@ -372,9 +380,9 @@ class Response(models.Model):
     class Meta:
         ordering = ('question',)
 
-    def __unicode__(self):
-        return "response to %s [%s]" % (unicode(self.question),
-                                        unicode(self.submission))
+    def __str__(self):
+        return "response to %s [%s]" % (smart_text(self.question),
+                                        smart_text(self.submission))
 
     def is_correct(self):
         return self.value in self.question.correct_answer_values()
@@ -493,5 +501,5 @@ class QuestionColumn(ReportColumnInterface):
                 else:  # short or long text
                     value = responses.first().value
 
-            value = smart_str(value)
+            value = smart_text(value)
         return value
