@@ -136,7 +136,8 @@ class QuestionColumnTest(PagetreeTestCase):
 
     def test_user_value_multiple_responses(self):
         alt_single_answer = Question.objects.create(
-            quiz=self.quiz, text='single answer 2', question_type='single choice')
+            quiz=self.quiz, text='single answer 2',
+            question_type='single choice')
         alt_answer_one = Answer.objects.create(
             question=alt_single_answer, label='Maybe', value='2')
         Answer.objects.create(
