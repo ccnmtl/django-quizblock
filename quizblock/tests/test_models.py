@@ -309,7 +309,7 @@ class TestIsUserCorrect(TestCase):
 
         self.assertTrue(question.is_user_correct(self.user))
 
-        #score
+        # score
         self.assertEquals(self.quiz.score(self.user), 1)
 
     def test_long_text(self):
