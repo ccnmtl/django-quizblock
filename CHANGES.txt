@@ -1,3 +1,6 @@
+1.2.1 (2016-06-16)
+==================
+
 * add some missing migrations
 * flake8 cleanup
 
