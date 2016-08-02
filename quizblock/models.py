@@ -92,8 +92,8 @@ class Quiz(models.Model):
     def create(cls, request):
         return cls.objects.create(
             description=request.POST.get('description', ''),
-            rhetorical=request.POST.get('rhetorical', ''),
-            allow_redo=request.POST.get('allow_redo', ''),
+            rhetorical=request.POST.get('rhetorical', False),
+            allow_redo=request.POST.get('allow_redo', False),
             show_submit_state=request.POST.get('show_submit_state', False))
 
     @classmethod
@@ -109,8 +109,8 @@ class Quiz(models.Model):
 
     def edit(self, vals, files):
         self.description = vals.get('description', '')
-        self.rhetorical = vals.get('rhetorical', '')
-        self.allow_redo = vals.get('allow_redo', '')
+        self.rhetorical = vals.get('rhetorical', False)
+        self.allow_redo = vals.get('allow_redo', False)
         self.show_submit_state = vals.get('show_submit_state', False)
         self.save()
 
