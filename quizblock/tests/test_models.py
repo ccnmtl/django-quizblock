@@ -125,11 +125,11 @@ class TestBasics(TestCase):
 
     def test_edit(self):
         q = Quiz()
-        q.edit(dict(description='foo', rhetorical='1',
+        q.edit(dict(description='foo', rhetorical='on',
                     allow_redo='0', show_submit_state='on'), None)
         self.assertEqual(q.description, 'foo')
-        self.assertEqual(q.rhetorical, '1')
-        self.assertEqual(q.allow_redo, '0')
+        self.assertEqual(q.rhetorical, True)
+        self.assertEqual(q.allow_redo, False)
         self.assertTrue(q.show_submit_state)
 
     def test_edit_two(self):
