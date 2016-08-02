@@ -102,8 +102,8 @@ class Quiz(models.Model):
         q = cls.objects.create(
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
-            allow_redo=d.get('allow_redo', False),
-            show_submit_state=d.get('show_submit_state', False),
+            allow_redo=d.get('allow_redo', True),
+            show_submit_state=d.get('show_submit_state', True),
         )
         q.import_from_dict(d)
         return q
