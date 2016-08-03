@@ -92,9 +92,10 @@ class Quiz(models.Model):
     def create(cls, request):
         return cls.objects.create(
             description=request.POST.get('description', ''),
-            rhetorical=request.POST.get('rhetorical', ''),
-            allow_redo=request.POST.get('allow_redo', ''),
-            show_submit_state=request.POST.get('show_submit_state', False))
+            rhetorical=request.POST.get('rhetorical', '') == 'on',
+            allow_redo=request.POST.get('allow_redo', '') == 'on',
+            show_submit_state=request.POST.get(
+                'show_submit_state', '') == 'on')
 
     @classmethod
     def create_from_dict(cls, d):
@@ -102,16 +103,16 @@ class Quiz(models.Model):
             description=d.get('description', ''),
             rhetorical=d.get('rhetorical', False),
             allow_redo=d.get('allow_redo', True),
-            show_submit_state=d.get('show_submit_state', True)
+            show_submit_state=d.get('show_submit_state', True),
         )
         q.import_from_dict(d)
         return q
 
     def edit(self, vals, files):
         self.description = vals.get('description', '')
-        self.rhetorical = vals.get('rhetorical', '')
-        self.allow_redo = vals.get('allow_redo', '')
-        self.show_submit_state = vals.get('show_submit_state', False)
+        self.rhetorical = vals.get('rhetorical', '') == 'on'
+        self.allow_redo = vals.get('allow_redo', '') == 'on'
+        self.show_submit_state = vals.get('show_submit_state', '') == 'on'
         self.save()
 
     def add_question_form(self, request=None):
