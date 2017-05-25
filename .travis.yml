@@ -19,10 +19,10 @@ after_success:
 - coveralls
 deploy:
   provider: pypi
+  distributions: "sdist bdist_wheel"
   user: ctlpypi
   password:
     secure: NqMUErbV/57kAeFn2Di4WsHenV0WUiY9XmEJOynYaenGLd2o1NLbgVJnJGK60hMiAWcKwd2W+np3cEBIdg2nkGlK/UzeMAL3blfSt2c1J58e4rX10IUhI2QM1aY2Na+6kyKunf2k9ZpMOfJUQUeGx9ccDLmnbRoUIz47Jq5nERU=
   on:
     tags: true
-    distributions: sdist bdist_wheel
     repo: ccnmtl/django-quizblock
