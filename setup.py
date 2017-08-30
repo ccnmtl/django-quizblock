@@ -29,7 +29,7 @@ setup(
     name="django-quizblock",
     version="1.2.2",
     author="Anders Pearson",
-    author_email="anders@columbia.edu",
+    author_email="ccnmtl-dev@columbia.edu",
     url="https://github.com/ccnmtl/django-quizblock",
     description="Basic Quiz PageBlock",
     long_description="Basic Quiz PageBlocks (see django-pagetree and django-pageblocks)",
