@@ -2,7 +2,10 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
 from django.utils.encoding import python_2_unicode_compatible
@@ -212,7 +215,7 @@ class Quiz(models.Model):
 
 @python_2_unicode_compatible
 class Question(models.Model):
-    quiz = models.ForeignKey(Quiz)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     text = models.TextField(help_text='Required')
     question_type = models.CharField(
         max_length=256,
@@ -331,7 +334,7 @@ class Question(models.Model):
 
 @python_2_unicode_compatible
 class Answer(models.Model):
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     value = models.CharField(max_length=256)
     label = models.TextField(blank=True)
     correct = models.BooleanField(default=False)
@@ -362,8 +365,8 @@ class Answer(models.Model):
 
 @python_2_unicode_compatible
 class Submission(models.Model):
-    quiz = models.ForeignKey(Quiz)
-    user = models.ForeignKey(User)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     submitted = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
@@ -374,8 +377,8 @@ class Submission(models.Model):
 
 @python_2_unicode_compatible
 class Response(models.Model):
-    question = models.ForeignKey(Question)
-    submission = models.ForeignKey(Submission)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
     value = models.TextField(blank=True)
 
     class Meta:
