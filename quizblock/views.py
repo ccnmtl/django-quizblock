@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 from quizblock.models import Quiz, Question, Answer
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
