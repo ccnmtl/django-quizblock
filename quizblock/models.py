@@ -69,13 +69,8 @@ class Quiz(models.Model):
         # meaning that the user can proceed *past* this one,
         # not that they can access this one. careful.
 
-        # This is needed for Django 1.8 support.
-        if callable(user.is_anonymous):
-            if user.is_anonymous():
-                return False
-        else:
-            if user.is_anonymous:
-                return False
+        if user.is_anonymous:
+            return False
 
         return Submission.objects.filter(quiz=self, user=user).count() > 0
 

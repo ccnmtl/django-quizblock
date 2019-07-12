@@ -43,7 +43,7 @@ def main():
             },
         ],
         TEST_RUNNER='django.test.runner.DiscoverRunner',
-        MIDDLEWARE_CLASSES=[],
+        MIDDLEWARE=[],
         PROJECT_APPS = [
             'quizblock',
         ],
