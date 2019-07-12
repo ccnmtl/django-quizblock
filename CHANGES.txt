@@ -1,6 +1,7 @@
 1.2.5
 ==================
 * add support for Django 2.0
+* remove Django 1.8 support
 
 1.2.4
 ==================
