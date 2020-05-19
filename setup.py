@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2015, Columbia Center For New Media Teaching And Learning (CCNMTL)
+# Copyright (c) 2010-2020, Columbia University Center For Teaching And Learning (CTL)
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,9 +27,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="1.2.5",
+    version="1.2.6",
     author="Anders Pearson",
-    author_email="ccnmtl-dev@columbia.edu",
+    author_email="ctl-dev@columbia.edu",
     url="https://github.com/ccnmtl/django-quizblock",
     description="Basic Quiz PageBlock",
     long_description="Basic Quiz PageBlocks (see django-pagetree and django-pageblocks)",
