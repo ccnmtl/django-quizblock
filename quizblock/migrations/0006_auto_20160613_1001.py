@@ -7,7 +7,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('quizblock', '0005_re_add_show_submit_state'),
+        ('quizblock', '0004_question_css_extra'),
     ]
 
     operations = [
