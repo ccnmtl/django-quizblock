@@ -11,17 +11,9 @@ RUNSERVER_PORT ?= 8000
 PY_DIRS ?= $(APP)
 DJANGO ?= "Django==2.2.13"
 
-# Travis has issues here. See:
-# https://github.com/travis-ci/travis-ci/issues/9524
-ifeq ($(TRAVIS),true)
-	FLAKE8 ?= flake8
-	PIP ?= pip
-	COVERAGE ?= coverage
-else
-	FLAKE8 ?= $(VE)/bin/flake8
-	PIP ?= $(VE)/bin/pip
-	COVERAGE ?=$(VE)/bin/pip
-endif
+FLAKE8 ?= $(VE)/bin/flake8
+PIP ?= $(VE)/bin/pip
+COVERAGE ?=$(VE)/bin/coverage
 
 
 all: flake8 test coverage
@@ -48,4 +40,4 @@ flake8: $(PY_SENTINAL)
 
 
 coverage: $(PY_SENTINAL)
-	coverage run --source=quizblock runtests.py
+	$(COVERAGE) run --source=quizblock runtests.py
