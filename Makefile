@@ -48,4 +48,4 @@ flake8: $(PY_SENTINAL)
 
 
 coverage: $(PY_SENTINAL)
-        coverage run --source=quizblock runtests.py
+	coverage run --source=quizblock runtests.py
