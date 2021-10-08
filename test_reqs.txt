@@ -5,7 +5,7 @@ coverage==6.0
 flake8==3.9.2
 django-jenkins==0.110.0
 pep8==1.7.1
-pyflakes==2.3.1
+pyflakes==2.4.0
 django-markwhat==1.6.2
 faker==9.0.0
 factory_boy==3.2.0
