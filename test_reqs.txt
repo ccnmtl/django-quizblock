@@ -9,7 +9,7 @@ pyflakes==2.4.0
 django-markwhat==1.6.2
 faker==12.3.3
 factory_boy==3.2.1
-importlib_metadata<4.11
+importlib_metadata<4.12
 zipp==3.6.0
 six==1.16.0
 entrypoints==0.4
