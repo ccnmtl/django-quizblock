@@ -1,3 +1,7 @@
+1.2.7 (2022-04-05)
+==================
+* Changes to make library Django 3.X compatible.
+
 1.2.6 (2020-05-19)
 ==================
 * Revert the commit from version 1.1.2:
@@ -42,7 +46,7 @@
 ==================
 * Fix detailed report bug: Map the answer id properly when there are multiple
 responses in the submission. Previously, the code was not filtering responses
-by the specified question. 
+by the specified question.
 
 1.1.3 (2015-07-09)
 ==================
@@ -115,12 +119,12 @@ by the specified question.
 ==================
 Adding some rudimentary scoring into the Quiz / Question models
 * A Quiz score is 0 if incomplete, else is the score / question count
-* A Question is "correct" if complete and 
+* A Question is "correct" if complete and
     (not answerable or
      has no correct answers or
      the user has selected the correct answers)
 
-0.9.3 
+0.9.3
 ==================
 fixing setup.py dependency reference to pagetree
 
