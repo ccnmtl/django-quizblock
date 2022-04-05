@@ -8,7 +8,6 @@ except ImportError:
     from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.encoding import smart_text
 from pagetree.models import PageBlock
 from pagetree.reports import ReportColumnInterface
@@ -16,7 +15,6 @@ from pagetree.reports import ReportColumnInterface
 from django.contrib.contenttypes.fields import GenericRelation
 
 
-@python_2_unicode_compatible
 class Quiz(models.Model):
     pageblocks = GenericRelation(PageBlock)
     description = models.TextField(blank=True)
@@ -217,7 +215,6 @@ class Quiz(models.Model):
         return score / self.question_set.count()
 
 
-@python_2_unicode_compatible
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     text = models.TextField(help_text='Required')
@@ -336,7 +333,6 @@ class Question(models.Model):
         return correct
 
 
-@python_2_unicode_compatible
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     value = models.CharField(max_length=256)
@@ -367,7 +363,6 @@ class Answer(models.Model):
                     css_extra=self.css_extra)
 
 
-@python_2_unicode_compatible
 class Submission(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -379,7 +374,6 @@ class Submission(models.Model):
                                                    self.submitted)
 
 
-@python_2_unicode_compatible
 class Response(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
