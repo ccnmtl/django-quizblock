@@ -1,3 +1,7 @@
+1.2.8 (2022-04-08)
+==================
+* Update deprecated staticfiles references
+
 1.2.7 (2022-04-05)
 ==================
 * Changes to make library Django 3.X compatible.
