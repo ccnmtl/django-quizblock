@@ -1,6 +1,6 @@
 {% load markup %}
 {% load getresponse %}
-{% load static from staticfiles %}
+{% load static %}
 {{ block.description|markdown }}
 
 {% if request.user.is_anonymous %}
