@@ -7,7 +7,7 @@ django-jenkins==0.110.0
 pep8==1.7.1
 pyflakes==2.4.0
 django-markwhat==1.6.2
-faker==13.12.1
+faker==13.13.0
 factory_boy==3.2.1
 importlib_metadata<4.12
 zipp==3.8.0
