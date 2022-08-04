@@ -14,7 +14,7 @@ zipp==3.8.1
 six==1.16.0
 entrypoints==0.4
 typing_extensions==4.3.0
-pycodestyle==2.9.0
+pycodestyle==2.9.1
 mccabe==0.7.0
 python-dateutil==2.8.2
 text-unidecode==1.3
