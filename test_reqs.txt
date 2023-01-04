@@ -1,4 +1,4 @@
-django-treebeard==4.5.1
+django-treebeard==4.6.0
 Markdown==3.4.1
 django-pagetree==1.4.3
 coverage==7.0.3
