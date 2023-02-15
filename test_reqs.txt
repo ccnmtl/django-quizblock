@@ -13,7 +13,7 @@ importlib_metadata<6.1
 zipp==3.13.0
 six==1.16.0
 entrypoints==0.4
-typing_extensions==4.4.0
+typing_extensions==4.5.0
 pycodestyle==2.10.0
 mccabe==0.7.0
 python-dateutil==2.8.2
