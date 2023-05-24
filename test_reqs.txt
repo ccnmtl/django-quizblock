@@ -1,7 +1,7 @@
 django-treebeard==4.7
 Markdown==3.4.3
 django-pagetree==1.4.3
-coverage==7.2.5
+coverage==7.2.6
 flake8==6.0.0
 django-jenkins==0.110.0
 pep8==1.7.1
