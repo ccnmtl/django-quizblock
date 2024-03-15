@@ -10,7 +10,7 @@ django-markwhat==1.6.2
 faker==24.2.0
 factory_boy==3.3.0
 importlib_metadata<7.1
-zipp==3.18.0
+zipp==3.18.1
 six==1.16.0
 entrypoints==0.4
 typing_extensions==4.10.0
