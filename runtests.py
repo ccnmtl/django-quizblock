@@ -1,7 +1,7 @@
 """ run tests for pagetree
 
 $ virtualenv ve
-$ ./ve/bin/pip install Django==1.8.1
+$ ./ve/bin/pip install Django==4.2.11
 $ ./ve/bin/pip install -r test_reqs.txt
 $ ./ve/bin/python runtests.py
 """
@@ -19,7 +19,6 @@ def main():
             'django.contrib.contenttypes',
             'django.contrib.sessions',
             'pagetree',
-            'django_markwhat',
             'quizblock'
         ),
         TEMPLATES = [
@@ -51,6 +50,8 @@ def main():
         ROOT_URLCONF = [],
         PAGEBLOCKS = ['pagetree.TestBlock', 'quizblock.Quiz'],
         SOUTH_TESTS_MIGRATE=False,
+
+        DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField',
 
         # Django replaces this, but it still wants it. *shrugs*
         DATABASES = {
