@@ -4,7 +4,7 @@ from django.test import TestCase
 from quizblock.models import Quiz, Question, Answer, Submission
 from quizblock.models import Response
 from django.contrib.auth.models import User
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 
 class FakeReq(object):
@@ -118,7 +118,7 @@ class TestBasics(TestCase):
     def test_summary_render(self):
         q = Quiz(description="short")
         self.assertEqual(q.summary_render(), "short")
-        q.description = ''.join(smart_text(x) for x in range(75))
+        q.description = ''.join(smart_str(x) for x in range(75))
         expected = ('012345678910111213141516171819202122'
                     '2324252627282930313233343...')
         self.assertEqual(q.summary_render(), expected)
@@ -180,7 +180,7 @@ class QuestionTest(TestCase):
         quiz = Quiz.objects.create()
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="long text")
-        self.assertEqual(smart_text(question), "foo")
+        self.assertEqual(smart_str(question), "foo")
 
     def test_display_number(self):
         quiz = Quiz.objects.create()
@@ -415,7 +415,7 @@ class AnswerTest(TestCase):
         question = Question.objects.create(
             quiz=quiz, text="foo", question_type="single choice")
         answer = Answer.objects.create(question=question, label="an answer")
-        self.assertEqual(smart_text(answer), "an answer")
+        self.assertEqual(smart_str(answer), "an answer")
 
     def test_edit_form(self):
         quiz = Quiz.objects.create()
@@ -472,7 +472,7 @@ class SubmissionTest(TestCase):
         user = User.objects.create(username="testuser")
         s = Submission.objects.create(quiz=quiz, user=user)
         self.assertTrue(
-            smart_text(s).startswith(
+            smart_str(s).startswith(
                 "quiz %d submission by testuser" % quiz.id))
 
 
@@ -493,7 +493,7 @@ class ResponseTest(TestCase):
             question=self.question,
             submission=self.submission,
             value=self.answer.label)
-        self.assertTrue(smart_text(response).startswith("response to "))
+        self.assertTrue(smart_str(response).startswith("response to "))
 
     def test_is_correct(self):
         response = Response.objects.create(

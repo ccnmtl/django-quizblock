@@ -8,7 +8,7 @@ except ImportError:
     from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from pagetree.models import PageBlock
 from pagetree.reports import ReportColumnInterface
 
@@ -31,7 +31,7 @@ class Quiz(models.Model):
         return self.pageblocks.first()
 
     def __str__(self):
-        return smart_text(self.pageblock())
+        return smart_str(self.pageblock())
 
     def needs_submit(self):
         return not self.rhetorical
@@ -134,7 +134,10 @@ class Quiz(models.Model):
                  rhetorical=self.rhetorical,
                  allow_redo=self.allow_redo,
                  show_submit_state=self.show_submit_state)
-        d['questions'] = [q.as_dict() for q in self.question_set.all()]
+        if self.pk is not None and self.question_set.count() > 0:
+            d['questions'] = [q.as_dict() for q in self.question_set.all()]
+        else:
+            d['questions'] = []
         return d
 
     def import_from_dict(self, d):
@@ -370,7 +373,7 @@ class Submission(models.Model):
 
     def __str__(self):
         return "quiz %d submission by %s at %s" % (self.quiz.id,
-                                                   smart_text(self.user),
+                                                   smart_str(self.user),
                                                    self.submitted)
 
 
@@ -383,8 +386,8 @@ class Response(models.Model):
         ordering = ('question',)
 
     def __str__(self):
-        return "response to %s [%s]" % (smart_text(self.question),
-                                        smart_text(self.submission))
+        return "response to %s [%s]" % (smart_str(self.question),
+                                        smart_str(self.submission))
 
     def is_correct(self):
         return self.value in self.question.correct_answer_values()
@@ -503,5 +506,5 @@ class QuestionColumn(ReportColumnInterface):
                 else:  # short or long text
                     value = responses.first().value
 
-            value = smart_text(value)
+            value = smart_str(value)
         return value
