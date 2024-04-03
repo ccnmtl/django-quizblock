@@ -27,8 +27,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="django-quizblock",
-    version="1.2.8",
-    author="Anders Pearson",
+    version="1.3.0",
+    author="Anders Pearson, Evan Petersen",
     author_email="ctl-dev@columbia.edu",
     url="https://github.com/ccnmtl/django-quizblock",
     description="Basic Quiz PageBlock",
