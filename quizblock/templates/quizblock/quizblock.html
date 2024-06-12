@@ -1,7 +1,7 @@
-{% load markup %}
+{% load markdownify %}
 {% load getresponse %}
 {% load static %}
-{{ block.description|markdown }}
+{{ block.description|markdownify }}
 
 {% if request.user.is_anonymous %}
   <p class="warning">You must be logged in to view this content</p>

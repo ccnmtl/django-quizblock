@@ -1,4 +1,4 @@
-{% load markup %}
+{% load markdownify %}
 {% comment %} short/long text questions {% endcomment %}
 
 {% if question.explanation %}
@@ -6,7 +6,7 @@
         <a href="#q{{question.id}}" class="moretoggle">Show explanation &gt;&gt;</a>
         <div id="q{{question.id}}" class="toggleable">
             <div class="casequestionexplanation">
-                {{question.explanation|markdown}}
+                {{question.explanation|markdownify}}
             </div>
         </div>
     </div>

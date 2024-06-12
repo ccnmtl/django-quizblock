@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2020, Columbia University Center For Teaching And Learning (CTL)
+# Copyright (c) 2010-2024, Columbia University Center For Teaching And Learning (CTL)
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without

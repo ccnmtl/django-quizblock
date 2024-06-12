@@ -1,5 +1,3 @@
-{% load markup %}
-
 <select name="pageblock-{{block.pageblock.id}}-question{{question.id}}" class="form-control"{% if response %} disabled{% endif %}>
   {% for answer in question.answer_set.all %}
         {% if response %}
