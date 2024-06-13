@@ -36,7 +36,7 @@ class LoggedInViewTest(TestCase):
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_question_to_quiz(self):
-        self.assertEquals(self.quiz.question_set.count(), 1)
+        self.assertEqual(self.quiz.question_set.count(), 1)
         url = "/quizblock/edit_quiz/%s/add_question" % self.quiz.id
 
         data = {u'text': [u'the text'],
@@ -47,13 +47,13 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = AddQuestionToQuizView.as_view()(request, pk=self.quiz.id)
-        self.assertEquals(response.status_code, 302)
-        self.assertEquals(self.quiz.question_set.count(), 2)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.quiz.question_set.count(), 2)
 
         question = self.quiz.question_set.get(text="the text")
-        self.assertEquals(question.intro_text, 'the intro')
-        self.assertEquals(question.explanation, 'the explanation')
-        self.assertEquals(question.question_type, 'short text')
+        self.assertEqual(question.intro_text, 'the intro')
+        self.assertEqual(question.explanation, 'the explanation')
+        self.assertEqual(question.question_type, 'short text')
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_edit_question(self):
@@ -68,17 +68,17 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = EditQuestionView.as_view()(request, pk=question.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
         question = self.quiz.question_set.all()[0]
-        self.assertEquals(question.intro_text, 'alt intro')
-        self.assertEquals(question.explanation, 'alt explanation')
-        self.assertEquals(question.question_type, 'short text')
+        self.assertEqual(question.intro_text, 'alt intro')
+        self.assertEqual(question.explanation, 'alt explanation')
+        self.assertEqual(question.question_type, 'short text')
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_answer_to_question(self):
         question = self.quiz.question_set.all()[0]
-        self.assertEquals(question.answer_set.count(), 2)
+        self.assertEqual(question.answer_set.count(), 2)
         url = '/quizblock/edit_question/%s/add_answer/' % question.id
 
         data = {u'explanation': [u'the explanation'],
@@ -88,12 +88,12 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = AddAnswerToQuestionView.as_view()(request, pk=question.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
-        self.assertEquals(question.answer_set.count(), 3)
+        self.assertEqual(question.answer_set.count(), 3)
         answer = question.answer_set.get(label='Maybe')
-        self.assertEquals(answer.explanation, 'the explanation')
-        self.assertEquals(answer.value, '2')
+        self.assertEqual(answer.explanation, 'the explanation')
+        self.assertEqual(answer.value, '2')
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_add_answer_to_question_emptylabel(self):
@@ -106,9 +106,9 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = AddAnswerToQuestionView.as_view()(request, pk=question.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
-        self.assertEquals(question.answer_set.count(), 3)
+        self.assertEqual(question.answer_set.count(), 3)
         question.answer_set.get(label='Maybe')
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
@@ -120,17 +120,17 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = DeleteQuestionView.as_view()(request, pk=question.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
-        self.assertEquals(self.quiz.question_set.count(), 0)
+        self.assertEqual(self.quiz.question_set.count(), 0)
 
     def test_reorder_answers(self):
         question = self.quiz.question_set.all()[0]
 
         yes = Answer.objects.get(label='Yes')
-        self.assertEquals(yes.display_number(), 1)
+        self.assertEqual(yes.display_number(), 1)
         no = Answer.objects.get(label='No')
-        self.assertEquals(no.display_number(), 2)
+        self.assertEqual(no.display_number(), 2)
 
         args = 'answer_0=%s&answer_1=%s' % (yes.id, no.id)
         url = '/quizblock/reorder_answers/%s/?%s' % (question.id, args)
@@ -138,12 +138,12 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = ReorderAnswersView.as_view()(request, pk=question.id)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
         yes = Answer.objects.get(label='Yes')
-        self.assertEquals(yes.display_number(), 1)
+        self.assertEqual(yes.display_number(), 1)
         no = Answer.objects.get(label='No')
-        self.assertEquals(no.display_number(), 2)
+        self.assertEqual(no.display_number(), 2)
 
     def test_reorder_questions(self):
         self.short_text = Question.objects.create(
@@ -159,7 +159,7 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = ReorderQuestionsView.as_view()(request, pk=self.quiz.id)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
         self.short_text = Question.objects.get(text='short text')
         self.assertEqual(self.short_text.display_number(), 1)
@@ -169,7 +169,7 @@ class LoggedInViewTest(TestCase):
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_delete_answer(self):
         question = self.quiz.question_set.all()[0]
-        self.assertEquals(question.answer_set.count(), 2)
+        self.assertEqual(question.answer_set.count(), 2)
         answer = question.answer_set.all()[0]
         url = '/quizblock/delete_answer/%s/' % answer.id
 
@@ -177,9 +177,9 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = DeleteAnswerView.as_view()(request, pk=answer.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
-        self.assertEquals(question.answer_set.count(), 1)
+        self.assertEqual(question.answer_set.count(), 1)
 
     @override_settings(ROOT_URLCONF='quizblock.urls')
     def test_edit_answer(self):
@@ -193,7 +193,7 @@ class LoggedInViewTest(TestCase):
         request.user = self.user
 
         response = EditAnswerView.as_view()(request, pk=answer.id)
-        self.assertEquals(response.status_code, 302)
+        self.assertEqual(response.status_code, 302)
 
         answer = question.answer_set.get(value='Possibly')
-        self.assertEquals(answer.explanation, 'alt explanation')
+        self.assertEqual(answer.explanation, 'alt explanation')
