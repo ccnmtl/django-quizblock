@@ -33,7 +33,10 @@ setup(
     url="https://github.com/ccnmtl/django-quizblock",
     description="Basic Quiz PageBlock",
     long_description="Basic Quiz PageBlocks (see django-pagetree and django-pageblocks)",
-    install_requires = ['django-pagetree >= 1.1.2'],
+    install_requires = [
+        'django-pagetree >= 1.1.2',
+        'django-markdownify'
+    ],
     scripts = [],
     license = "BSD",
     platforms = ["any"],
