@@ -15,10 +15,10 @@
                     <input name="pageblock-{{block.pageblock.id}}-question{{question.id}}"
                         value="{{answer.value}}" type="radio"
                         disabled="disabled"
-                        {% ifequal response.value answer.value %}
+                        {% if response.value == answer.value %}
                             class="yours {% if response.is_correct %}correct{% else %}incorrect{% endif %}"
                             checked="checked"
-                        {% endifequal %}/> <span class="caseanswerlabel">{{answer.label|safe}}</span>
+                        {% endif %}/> <span class="caseanswerlabel">{{answer.label|safe}}</span>
                     </label>
                     
                     <span class="caseanswerresult">
