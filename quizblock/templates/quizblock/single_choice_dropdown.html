@@ -1,11 +1,11 @@
 <select name="pageblock-{{block.pageblock.id}}-question{{question.id}}" class="form-control"{% if response %} disabled{% endif %}>
   {% for answer in question.answer_set.all %}
         {% if response %}
-          {% ifequal response.value answer.value %}
+          {% if response.value == answer.value %}
              <option value="{{answer.value}}" selected>{{answer.label}}</option>
           {% else %}
             <option value="{{answer.value}}">{{answer.label}}</option>
-          {% endifequal %}
+          {% endif %}
         {% else %}
            <option value="{{answer.value}}">{{answer.label}}</option>
         {% endif %}
