@@ -32,8 +32,8 @@ class TestBasics(TestCase):
     def test_create_method(self):
         r = FakeReq()
         q = Quiz.create(r)
-        self.assertEquals(q.description, '')
-        self.assertEquals(q.display_name, 'Quiz')
+        self.assertEqual(q.description, '')
+        self.assertEqual(q.display_name, 'Quiz')
         self.assertFalse(q.show_submit_state)
         self.assertFalse(q.rhetorical)
         self.assertFalse(q.allow_redo)
@@ -44,8 +44,8 @@ class TestBasics(TestCase):
         r.POST['rhetorical'] = 'on'
         r.POST['allow_redo'] = 'on'
         q = Quiz.create(r)
-        self.assertEquals(q.description, '')
-        self.assertEquals(q.display_name, 'Quiz')
+        self.assertEqual(q.description, '')
+        self.assertEqual(q.display_name, 'Quiz')
         self.assertTrue(q.show_submit_state)
         self.assertTrue(q.rhetorical)
         self.assertTrue(q.allow_redo)
@@ -55,29 +55,29 @@ class TestBasics(TestCase):
         d = q1.as_dict()
         q2 = Quiz(description="second")
         q2.import_from_dict(d)
-        self.assertEquals(q2.description, "first")
-        self.assertEquals(q1.allow_redo, q2.allow_redo)
-        self.assertEquals(q1.rhetorical, q2.rhetorical)
-        self.assertEquals(q1.show_submit_state, q2.show_submit_state)
+        self.assertEqual(q2.description, "first")
+        self.assertEqual(q1.allow_redo, q2.allow_redo)
+        self.assertEqual(q1.rhetorical, q2.rhetorical)
+        self.assertEqual(q1.show_submit_state, q2.show_submit_state)
 
     def test_create_from_dict(self):
         q = Quiz(description="first")
         d = q.as_dict()
         q2 = Quiz.create_from_dict(d)
-        self.assertEquals(q2.description, "first")
-        self.assertEquals(q.allow_redo, q2.allow_redo)
-        self.assertEquals(q.rhetorical, q2.rhetorical)
-        self.assertEquals(q.show_submit_state, q2.show_submit_state)
+        self.assertEqual(q2.description, "first")
+        self.assertEqual(q.allow_redo, q2.allow_redo)
+        self.assertEqual(q.rhetorical, q2.rhetorical)
+        self.assertEqual(q.show_submit_state, q2.show_submit_state)
 
     def test_create_from_dict_defaults(self):
         d = {
             'description': 'Test Quiz',
         }
         q = Quiz.create_from_dict(d)
-        self.assertEquals(q.description, 'Test Quiz')
-        self.assertEquals(q.allow_redo, True)
-        self.assertEquals(q.rhetorical, False)
-        self.assertEquals(q.show_submit_state, True)
+        self.assertEqual(q.description, 'Test Quiz')
+        self.assertEqual(q.allow_redo, True)
+        self.assertEqual(q.rhetorical, False)
+        self.assertEqual(q.show_submit_state, True)
 
     def test_import_from_dict_defaults(self):
         d = {
@@ -277,13 +277,13 @@ class QuestionTest(TestCase):
         Answer.objects.create(question=q1, label="a", value="a", correct=True)
         Answer.objects.create(question=q1, label="b", value="b")
 
-        self.assertEquals(len(q1.user_responses(user)), 0)
+        self.assertEqual(len(q1.user_responses(user)), 0)
 
         s = Submission.objects.create(quiz=quiz, user=user)
-        self.assertEquals(len(q1.user_responses(user)), 0)
+        self.assertEqual(len(q1.user_responses(user)), 0)
 
         Response.objects.create(question=q1, submission=s, value="a")
-        self.assertEquals(len(q1.user_responses(user)), 1)
+        self.assertEqual(len(q1.user_responses(user)), 1)
 
 
 class TestIsUserCorrect(TestCase):
@@ -293,7 +293,7 @@ class TestIsUserCorrect(TestCase):
         self.quiz = Quiz.objects.create()
 
     def test_no_questions(self):
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
     def test_short_text(self):
         question = Question.objects.create(quiz=self.quiz,
@@ -302,7 +302,7 @@ class TestIsUserCorrect(TestCase):
 
         # no submissions
         self.assertIsNone(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
         sub = Submission.objects.create(quiz=self.quiz, user=self.user)
         Response.objects.create(question=question, submission=sub, value="a")
@@ -310,7 +310,7 @@ class TestIsUserCorrect(TestCase):
         self.assertTrue(question.is_user_correct(self.user))
 
         # score
-        self.assertEquals(self.quiz.score(self.user), 1)
+        self.assertEqual(self.quiz.score(self.user), 1)
 
     def test_long_text(self):
         question = Question.objects.create(quiz=self.quiz,
@@ -319,13 +319,13 @@ class TestIsUserCorrect(TestCase):
 
         # no submissions
         self.assertIsNone(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
         sub = Submission.objects.create(quiz=self.quiz, user=self.user)
         Response.objects.create(question=question, submission=sub, value="b")
 
         self.assertTrue(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 1)
+        self.assertEqual(self.quiz.score(self.user), 1)
 
     def test_single_choice_no_correct_answers(self):
         question = Question.objects.create(quiz=self.quiz,
@@ -337,14 +337,14 @@ class TestIsUserCorrect(TestCase):
 
         # no response
         self.assertIsNone(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
         # user responded
         sub = Submission.objects.create(quiz=self.quiz, user=self.user)
         Response.objects.create(question=question, submission=sub, value="b")
 
         self.assertTrue(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 1)
+        self.assertEqual(self.quiz.score(self.user), 1)
 
     def test_single_choice_correct_answers(self):
         question = Question.objects.create(quiz=self.quiz,
@@ -357,7 +357,7 @@ class TestIsUserCorrect(TestCase):
 
         # no response
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
         # user responded
         sub = Submission.objects.create(quiz=self.quiz, user=self.user)
@@ -365,12 +365,12 @@ class TestIsUserCorrect(TestCase):
                                            submission=sub, value="a")
 
         self.assertTrue(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 1)
+        self.assertEqual(self.quiz.score(self.user), 1)
 
         response.value = 'b'
         response.save()
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 0)
+        self.assertEqual(self.quiz.score(self.user), 0)
 
     def test_multiple_choice_correct_answers(self):
         question = Question.objects.create(quiz=self.quiz,
@@ -384,29 +384,29 @@ class TestIsUserCorrect(TestCase):
 
         # no response
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), None)
+        self.assertEqual(self.quiz.score(self.user), None)
 
         # user responded - incorrectly
         sub = Submission.objects.create(quiz=self.quiz, user=self.user)
         c = Response.objects.create(question=question,
                                     submission=sub, value="c")
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 0)
+        self.assertEqual(self.quiz.score(self.user), 0)
 
         # user responded - partially incorrectly
         Response.objects.create(question=question, submission=sub, value="a")
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 0)
+        self.assertEqual(self.quiz.score(self.user), 0)
 
         # user responded - partially incorrectly
         Response.objects.create(question=question, submission=sub, value="b")
         self.assertFalse(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 0)
+        self.assertEqual(self.quiz.score(self.user), 0)
 
         # kill the incorrect one
         c.delete()
         self.assertTrue(question.is_user_correct(self.user))
-        self.assertEquals(self.quiz.score(self.user), 1)
+        self.assertEqual(self.quiz.score(self.user), 1)
 
 
 class AnswerTest(TestCase):
