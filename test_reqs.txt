@@ -10,7 +10,7 @@ faker==33.1.0
 factory_boy==3.3.1
 importlib_metadata<8.6
 zipp==3.20.2
-six==1.16.0
+six==1.17.0
 entrypoints==0.4
 typing_extensions==4.12.2
 pycodestyle==2.12.1
