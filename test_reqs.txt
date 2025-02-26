@@ -9,7 +9,7 @@ pyflakes==3.2.0
 faker==35.2.0
 factory_boy==3.3.3
 importlib_metadata<8.7
-zipp==3.20.2
+zipp==3.21.0
 six==1.17.0
 entrypoints==0.4
 typing_extensions==4.12.2
