@@ -17,7 +17,7 @@ pycodestyle==2.12.1
 mccabe==0.7.0
 python-dateutil==2.9.0.post0
 text-unidecode==1.3
-django-bootstrap3==24.3
+django-bootstrap3==25.1
 
 backports.zoneinfo;python_version<"3.9"
 webencodings==0.5.1 # django-markdownify
