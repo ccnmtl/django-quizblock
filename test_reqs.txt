@@ -6,7 +6,7 @@ flake8==7.2.0
 pep8==1.7.1
 pyflakes==3.3.2
 
-faker==37.1.0
+faker==37.3.0
 factory_boy==3.3.3
 importlib_metadata<8.8
 zipp==3.21.0
