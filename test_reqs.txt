@@ -1,5 +1,5 @@
 django-treebeard==4.7.1
-Markdown==3.8
+Markdown==3.8.1
 django-pagetree==1.5.0
 coverage==7.9.1
 flake8==7.2.0
