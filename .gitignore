@@ -4,7 +4,6 @@ dist/
 *~
 *.pyc
 ve
-.coverage
 reports/
 build
 django_quizblock.egg-info/
