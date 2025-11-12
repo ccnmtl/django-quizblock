@@ -21,7 +21,7 @@ def main():
             'pagetree',
             'quizblock'
         ),
-        TEMPLATES = [
+        TEMPLATES=[
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
                 'DIRS': [
@@ -43,18 +43,18 @@ def main():
         ],
         TEST_RUNNER='django.test.runner.DiscoverRunner',
         MIDDLEWARE=[],
-        PROJECT_APPS = [
+        PROJECT_APPS=[
             'quizblock',
         ],
-        COVERAGE_EXCLUDES_FOLDERS = ['migrations', 'south_migrations'],
-        ROOT_URLCONF = [],
-        PAGEBLOCKS = ['pagetree.TestBlock', 'quizblock.Quiz'],
+        COVERAGE_EXCLUDES_FOLDERS=['migrations', 'south_migrations'],
+        ROOT_URLCONF=[],
+        PAGEBLOCKS=['pagetree.TestBlock', 'quizblock.Quiz'],
         SOUTH_TESTS_MIGRATE=False,
 
-        DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField',
+        DEFAULT_AUTO_FIELD='django.db.models.BigAutoField',
 
         # Django replaces this, but it still wants it. *shrugs*
-        DATABASES = {
+        DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
                 'NAME': ':memory:',
@@ -72,6 +72,7 @@ def main():
 
     # Fire off the tests
     call_command('test')
+
 
 if __name__ == '__main__':
     main()
