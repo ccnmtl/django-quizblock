@@ -20,6 +20,6 @@ django-bootstrap3==25.3
 
 backports.zoneinfo;python_version<"3.9"
 webencodings==0.5.1 # django-markdownify
-tinycss2==1.5.0 # django-markdownify
+tinycss2==1.5.1 # django-markdownify
 bleach==6.3.0 # django-markdownify
 django-markdownify==0.9.5
