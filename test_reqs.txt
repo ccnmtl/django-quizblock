@@ -1,5 +1,5 @@
 django-treebeard==6.0.0
-Markdown==3.10.2
+Markdown==3.10.3
 django-pagetree==1.7.15
 flake8==7.3.0
 pep8==1.7.1
