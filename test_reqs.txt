@@ -1,4 +1,4 @@
-django-treebeard==7.0.0
+django-treebeard==7.0.1
 Markdown==3.10.3
 django-pagetree==1.7.15
 flake8==7.3.0
