@@ -1,7 +1,7 @@
 django-treebeard==7.0.2
 Markdown==3.10.3
 django-pagetree==1.7.15
-flake8==7.3.0
+flake8==7.4.1
 pep8==1.7.1
 pyflakes==4.0.0
 
