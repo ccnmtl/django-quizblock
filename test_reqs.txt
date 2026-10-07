@@ -3,7 +3,7 @@ Markdown==3.11
 django-pagetree==1.7.15
 flake8==7.4.1
 pep8==1.7.1
-pyflakes==4.0.1
+pyflakes==4.0.2
 
 faker==40.40.0
 factory_boy==3.3.3
